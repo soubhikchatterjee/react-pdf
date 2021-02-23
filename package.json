@@ -1,0 +1,65 @@
+{
+  "name": "@soubhikchatterjee/react-pdf",
+  "version": "0.1.0",
+  "author": "Soubhik Chatterjee <soubhik@chatterjee.pw>",
+  "contributors": [
+    {
+      "name": "Soubhik Chatterjee",
+      "email": "soubhik@chatterjee.pw",
+      "url": "https://soubhik.chatterjee.pw"
+    }
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/soubhikchatterjee/react-pdf.git"
+  },
+  "bugs": {
+    "url": "https://github.com/soubhikchatterjee/react-pdf/issues"
+  },
+  "keywords": [
+    "pdf viewer",
+    "zoom pdf page",
+    "rotate pdf page",
+    "scroll pdf pages",
+    "rearrange pdf pages"
+  ],
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "pdfjs-dist": "^2.6.347",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "4.0.3",
+    "web-vitals": "^1.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build-dev": "react-scripts build",
+    "build": "rimraf dist && NODE_ENV=production babel src/lib --out-dir dist --copy-files --ignore \"src/lib/server/server.js\",__tests__,spec.js,test.js,__snapshots__"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
