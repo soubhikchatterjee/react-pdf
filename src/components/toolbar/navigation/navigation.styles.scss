@@ -1,0 +1,21 @@
+.react__pdf--navigation {
+  display: flex;
+  min-width: 5rem;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+
+  &-digits {
+    font-size: 0.9rem;
+    padding: 0 0.5rem;
+  }
+
+  &-divider {
+    font-size: 0.7rem;
+  }
+
+  .fa-caret-left,
+  .fa-caret-right {
+    font-size: 1.5rem;
+  }
+}

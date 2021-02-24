@@ -1,0 +1,18 @@
+.react__pdf--bars {
+  color: #fff;
+  font-size: 1.1rem;
+  float: right;
+  margin: 1rem;
+  transition: all 0.5s;
+  height: 2rem;
+  width: 2rem;
+  padding: 0.5rem;
+  border-radius: 50%;
+  text-align: center;
+
+  &:hover {
+    background: var(--icon-hover-color);
+    color: var(--toolbar-bg-color);
+    border-radius: 100%;
+  }
+}

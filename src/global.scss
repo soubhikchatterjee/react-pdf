@@ -1,0 +1,120 @@
+* {
+  // To be removed
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  --toolbar-bg-color: #2c3e50;
+  --canvas-bg-color: #808e9b;
+  --toolbar-color: #ffffff;
+  --icon-hover-color: #eaeded;
+}
+
+@font-face {
+  font-family: "Poppins-ExtraLight";
+  src: url("./resources/fonts/Poppins-ExtraLight.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-Regular";
+  src: url("./resources/fonts/Poppins-Regular.ttf");
+}
+
+// todo remove
+.outer-app {
+  // width: 700px;
+  // height: 600px;
+}
+
+.react__pdf--app {
+  position: relative;
+  font-family: "Poppins-ExtraLight", sans-serif;
+  background: var(--canvas-bg-color);
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.clear-fix {
+  clear: both;
+}
+
+// Margins
+$spacings: (
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  20,
+  25,
+  30,
+  35,
+  40,
+  45,
+  50
+);
+
+@each $space in $spacings {
+  // Line Heights
+  .lh-#{$space} {
+    line-height: #{$space * 3}px;
+  }
+
+  // Margins
+  .m-#{$space} {
+    margin: #{$space}px;
+  }
+  .my-#{$space} {
+    margin: #{$space}px 0;
+  }
+  .mx-#{$space} {
+    margin: 0 #{$space}px;
+  }
+  .mt-#{$space} {
+    margin-top: #{$space}px;
+  }
+  .mb-#{$space} {
+    margin-bottom: #{$space}px;
+  }
+  .ml-#{$space} {
+    margin-left: #{$space}px;
+  }
+  .mr-#{$space} {
+    margin-right: #{$space}px;
+  }
+
+  // Paddings
+  .p-#{$space} {
+    padding: #{$space}px;
+  }
+  .py-#{$space} {
+    padding: #{$space}px 0;
+  }
+  .px-#{$space} {
+    padding: 0 #{$space}px;
+  }
+  .pt-#{$space} {
+    padding-top: #{$space}px;
+  }
+  .pb-#{$space} {
+    padding-bottom: #{$space}px;
+  }
+  .pl-#{$space} {
+    padding-left: #{$space}px;
+  }
+  .pr-#{$space} {
+    padding-right: #{$space}px;
+  }
+}
