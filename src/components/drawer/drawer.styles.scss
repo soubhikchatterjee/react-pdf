@@ -1,5 +1,6 @@
 .react__pdf--drawer {
-  background: rgba(#34495e, $alpha: 0.9);
+  background-color: var(--drawer-bg-color);
+  opacity: 0.9;
   position: fixed;
   height: 100vh;
   min-width: 20vw;
@@ -44,5 +45,28 @@
     align-items: center;
     justify-content: center;
     border-radius: 15px;
+  }
+
+  &-thumbnail {
+    height: 13rem;
+    width: 10rem;
+    overflow: hidden;
+    object-fit: cover;
+    outline: 1px solid #fff;
+    padding: 3px;
+    cursor: pointer;
+
+    &:hover {
+      -webkit-box-shadow: -1px 4px 32px -4px rgba(255, 255, 255, 1);
+      -moz-box-shadow: -1px 4px 32px -4px rgba(255, 255, 255, 1);
+      box-shadow: -1px 4px 32px -4px rgba(255, 255, 255, 1);
+    }
+
+    &-page-number {
+      color: #fff;
+      font-size: 0.8rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
   }
 }
