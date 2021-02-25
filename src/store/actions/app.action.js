@@ -10,6 +10,7 @@ export const ROTATE_CURRENT_PAGE = "ROTATE_CURRENT_PAGE";
 export const ROTATE_SELECTED_PAGES = "ROTATE_SELECTED_PAGES";
 export const ROTATE_ALL_PAGES = "ROTATE_ALL_PAGES";
 export const ROTATE_PAGE_LIST = "ROTATE_PAGE_LIST";
+export const CHANGES_SAVED = "CHANGES_SAVED";
 
 export const setLoadingPages = loading => dispatch => {
   return dispatch({
@@ -71,6 +72,7 @@ export const setRotateCurrentPage = ({
   currentPage,
   direction
 }) => dispatch => {
+  dispatch(setChangesSaved(false));
   return dispatch({
     type: ROTATE_SELECTED_PAGES,
     payload: currentPage,
@@ -79,6 +81,7 @@ export const setRotateCurrentPage = ({
 };
 
 export const setRotateAllPages = direction => dispatch => {
+  dispatch(setChangesSaved(false));
   return dispatch({
     type: ROTATE_ALL_PAGES,
     direction
@@ -89,5 +92,12 @@ export const setRotatePagesList = pageList => dispatch => {
   return dispatch({
     type: ROTATE_PAGE_LIST,
     payload: pageList
+  });
+};
+
+export const setChangesSaved = isChangesSaved => dispatch => {
+  return dispatch({
+    type: CHANGES_SAVED,
+    payload: isChangesSaved
   });
 };

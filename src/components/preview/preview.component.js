@@ -81,12 +81,6 @@ function Preview() {
       }
       dispatch(AppAction.setLoadingPages(false));
       canvasElement.scrollIntoView({ behavior: "smooth" });
-
-      // PdfJs.getDocument(url)
-      //   .promise.then(doc => {
-
-      //   })
-      //   .catch(e => console.error(e));
     }
   }, [pdfDocument, currentPage, maxPageGenerated, createPages, dispatch]);
 
