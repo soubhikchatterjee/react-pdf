@@ -1,0 +1,46 @@
+.react__pdf--button {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  &-arrow {
+    height: 1.4rem;
+    width: 1.5rem;
+    padding: 0.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease-in;
+
+    &:hover {
+      color: var(--drawer-bg-color);
+      background-color: var(--icon-hover-color);
+    }
+
+    .fa-caret-down {
+      line-height: 0;
+    }
+  }
+
+  &-menu {
+    border: 1px solid #000;
+    position: absolute;
+    top: 1.5rem;
+    right: 0.2rem;
+    background-color: var(--drawer-bg-color);
+    font-size: 0.8rem;
+    min-width: max-content;
+    min-height: 2rem;
+    border-radius: 3px;
+
+    &-item {
+      padding: 0.6rem;
+
+      &:hover {
+        background-color: var(--icon-hover-color);
+        color: var(--toolbar-bg-color);
+      }
+    }
+  }
+}
