@@ -7,6 +7,7 @@ import Navigation from "./navigation/navigation.component";
 import Zoom from "./zoom/zoom.component";
 import Rotate from "./rotate/rotate.component";
 import Rearrange from "./rearrange/rearrange.component";
+import Save from "./save/save.component";
 
 // Styles
 import "./toolbar.styles.scss";
@@ -20,6 +21,7 @@ function Toolbar() {
       <Zoom />
       <Rotate />
       <Rearrange />
+      <Save />
     </div>
   );
 }

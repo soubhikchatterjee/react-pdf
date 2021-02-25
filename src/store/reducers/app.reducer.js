@@ -111,6 +111,12 @@ const AppReducer = (state = {}, action) => {
         [AppAction.ROTATE_PAGE_LIST]: action.payload
       };
 
+    case AppAction.CHANGES_SAVED:
+      return {
+        ...state,
+        [AppAction.CHANGES_SAVED]: action.payload
+      };
+
     default:
       return state;
   }
