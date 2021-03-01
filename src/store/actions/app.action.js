@@ -9,7 +9,8 @@ export const PDF_TOTAL_PAGES = "PDF_TOTAL_PAGES";
 export const ROTATE_CURRENT_PAGE = "ROTATE_CURRENT_PAGE";
 export const ROTATE_SELECTED_PAGES = "ROTATE_SELECTED_PAGES";
 export const ROTATE_ALL_PAGES = "ROTATE_ALL_PAGES";
-export const ROTATE_PAGE_LIST = "ROTATE_PAGE_LIST";
+export const PAGE_LIST = "ROTATE_PAGE_LIST";
+export const ZOOM_LEVEL = "ZOOM_LEVEL";
 export const CHANGES_SAVED = "CHANGES_SAVED";
 
 export const setLoadingPages = loading => dispatch => {
@@ -88,9 +89,16 @@ export const setRotateAllPages = direction => dispatch => {
   });
 };
 
-export const setRotatePagesList = pageList => dispatch => {
+export const setZoomLevel = value => dispatch => {
   return dispatch({
-    type: ROTATE_PAGE_LIST,
+    type: ZOOM_LEVEL,
+    payload: value
+  });
+};
+
+export const setPageList = pageList => dispatch => {
+  return dispatch({
+    type: PAGE_LIST,
     payload: pageList
   });
 };

@@ -21,7 +21,7 @@ function Button({
 
       {/* Menu Icon */}
       {menu && (
-        <div className="react__pdf--button-arrow">
+        <div className="react__pdf--button-arrow ml-5">
           <i
             onClick={() => setShowMenu(!showMenu)}
             className="fas fa-caret-down pointer"
