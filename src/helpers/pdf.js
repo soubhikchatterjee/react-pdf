@@ -1,11 +1,12 @@
 export const INITIAL_MAX_PAGES = 2;
+export const DEFAULT_SCALE_LEVEL = 1;
+export const DEFAULT_ZOOM_LEVEL = 100;
 
 // Create multiple pages
 export function createMultiplePages({
   doc,
   startPage = 1,
   totalPages,
-  scale = 2,
   rotation = 0,
   canvasPrefix = "canvas",
   showPageNumber = false,
@@ -35,17 +36,20 @@ export function createMultiplePages({
     if (showPageNumber) {
       viewer.appendChild(pageNumberElement);
     }
-    renderPage({ doc, canvas, pageNumber, scale, rotation });
+    renderPage({ doc, canvas, pageNumber, rotation });
   }
 }
 
 // Render a single page
-export function renderPage({ doc, canvas, pageNumber, scale, rotation }) {
+export function renderPage({ doc, canvas, pageNumber, rotation }) {
   doc
     .getPage(pageNumber)
     .then(page => {
       const context = canvas.getContext("2d");
-      const viewport = page.getViewport({ scale, rotation });
+      const viewport = page.getViewport({
+        scale: DEFAULT_SCALE_LEVEL,
+        rotation
+      });
       canvas.height = viewport.height;
       canvas.width = viewport.width;
 
