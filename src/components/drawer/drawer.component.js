@@ -16,42 +16,40 @@ function Drawer() {
   PdfJs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
   const dispatch = useDispatch();
-  const url = useSelector(state => state.appReducer[AppAction.PDF_URL]);
+  const pdfDocument = useSelector(
+    state => state.appReducer[AppAction.PDF_DOCUMENT]
+  );
   const showDrawer = useSelector(
     state => state.appReducer[AppAction.DRAWER_VISIBILITY]
   );
 
-  const createPages = useCallback(
-    ({ doc, startPage, totalPages, scale, rotation }) => {
-      createMultiplePages({
-        doc,
-        startPage: 1,
-        totalPages,
-        scale: 1,
-        rotation: 360,
-        canvasPrefix: "canvas_thumbnail",
-        pdfElement: "pdf-thumbnail-viewer",
-        canvasClassname: "react__pdf--drawer-thumbnail",
-        showPageNumber: true,
-        pageNumberClassname: "react__pdf--drawer-thumbnail-page-number"
-      });
-    },
-    []
-  );
+  const createPages = useCallback(({ doc, totalPages }) => {
+    createMultiplePages({
+      doc,
+      startPage: 1,
+      totalPages,
+      rotation: 360,
+      canvasPrefix: "canvas_thumbnail",
+      pdfElement: "pdf-thumbnail-viewer",
+      canvasClassname: "react__pdf--drawer-thumbnail",
+      showPageNumber: true,
+      pageNumberClassname: "react__pdf--drawer-thumbnail-page-number"
+    });
+  }, []);
 
   // Render First two pages (if more then 2 pages otherwise render first page)
   useEffect(() => {
-    if (url) {
-      PdfJs.getDocument(url)
-        .promise.then(doc => {
-          dispatch(AppAction.setTotalPages(doc.numPages));
-          dispatch(AppAction.setCurrentPage(1));
-          createPages({ doc, startPage: 1, totalPages: doc.numPages });
-          dispatch(AppAction.setLoadingThumbnails(false));
-        })
-        .catch(e => console.error(e));
+    if (pdfDocument) {
+      dispatch(AppAction.setTotalPages(pdfDocument.numPages));
+      dispatch(AppAction.setCurrentPage(1));
+      createPages({
+        doc: pdfDocument,
+        startPage: 1,
+        totalPages: pdfDocument.numPages
+      });
+      dispatch(AppAction.setLoadingThumbnails(false));
     }
-  }, [url, dispatch, createPages]);
+  }, [pdfDocument, dispatch, createPages]);
 
   return (
     <div

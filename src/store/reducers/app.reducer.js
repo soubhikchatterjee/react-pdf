@@ -105,10 +105,16 @@ const AppReducer = (state = {}, action) => {
         }
       };
 
-    case AppAction.ROTATE_PAGE_LIST:
+    case AppAction.PAGE_LIST:
       return {
         ...state,
-        [AppAction.ROTATE_PAGE_LIST]: action.payload
+        [AppAction.PAGE_LIST]: action.payload
+      };
+
+    case AppAction.ZOOM_LEVEL:
+      return {
+        ...state,
+        [AppAction.ZOOM_LEVEL]: action.payload
       };
 
     case AppAction.CHANGES_SAVED:

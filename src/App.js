@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Custom components
-import alert from "helpers/alert";
 import Preview from "components/preview/preview.component";
 import Toolbar from "components/toolbar/toolbar.component";
 import Drawer from "components/drawer/drawer.component";
 import Spinner from "components/spinner/spinner.component";
+import NotFound from "components/404/404.component";
 
 // Custom components
 import * as AppAction from "store/actions/app.action";
@@ -23,6 +23,7 @@ function App({ url }) {
   const isLoadingThumbnails = useSelector(
     state => state.appReducer[AppAction.LOADING_THUMBNAILS]
   );
+  const [error, setError] = useState("");
 
   // Set the url to the store
   useEffect(() => {
@@ -34,7 +35,7 @@ function App({ url }) {
           dispatch(AppAction.setLoadingThumbnails(true));
         })
         .catch(e => {
-          alert.error(e.message);
+          setError(e.message);
         });
     }
   }, [url, dispatch]);
@@ -52,7 +53,8 @@ function App({ url }) {
 
       <Toolbar />
       <Drawer />
-      <Preview />
+      {!error && <Preview />}
+      {error && <NotFound error={error}/>}
     </div>
   );
 }

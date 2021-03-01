@@ -32,7 +32,7 @@ function Rotate() {
   const rotateRightMenu = [
     {
       label: "Rotate Selected Page",
-      onClick: e => {
+      onClick: () => {
         dispatch(
           AppAction.setRotateCurrentPage({ currentPage, direction: "RIGHT" })
         );
