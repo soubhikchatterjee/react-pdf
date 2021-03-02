@@ -1,5 +1,4 @@
 export const INITIAL_MAX_PAGES = 2;
-export const DEFAULT_SCALE_LEVEL = 1;
 export const DEFAULT_ZOOM_LEVEL = 100;
 
 // Create multiple pages
@@ -47,7 +46,7 @@ export function renderPage({ doc, canvas, pageNumber, rotation }) {
     .then(page => {
       const context = canvas.getContext("2d");
       const viewport = page.getViewport({
-        scale: DEFAULT_SCALE_LEVEL,
+        scale: 2,
         rotation
       });
       canvas.height = viewport.height;
