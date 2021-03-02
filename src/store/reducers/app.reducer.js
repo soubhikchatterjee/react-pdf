@@ -20,10 +20,10 @@ const AppReducer = (state = {}, action) => {
         [AppAction.PDF_URL]: action.payload
       };
 
-    case AppAction.PDF_DOCUMENT:
+    case AppAction.PDF_FILENAME:
       return {
         ...state,
-        [AppAction.PDF_DOCUMENT]: action.payload
+        [AppAction.PDF_FILENAME]: action.payload
       };
 
     case AppAction.DRAWER_VISIBILITY:
@@ -38,12 +38,6 @@ const AppReducer = (state = {}, action) => {
         [AppAction.PDF_CURRENT_PAGE]: action.payload
       };
 
-    case AppAction.PDF_MAX_PAGE_GENERATED:
-      return {
-        ...state,
-        [AppAction.PDF_MAX_PAGE_GENERATED]: action.payload
-      };
-
     case AppAction.PDF_TOTAL_PAGES:
       return {
         ...state,
@@ -53,17 +47,15 @@ const AppReducer = (state = {}, action) => {
       const pageNumberToRotate = action.payload;
       const direction = action.direction;
 
-      let oldPages = state[AppAction.ROTATE_SELECTED_PAGES] || [];
-      let pageExists = false;
+      let oldPages = [...state[AppAction.PAGE_LIST]] || [];
       let rotation;
 
       oldPages = oldPages.map(page => {
         if (page.pageNumber === pageNumberToRotate) {
-          pageExists = true;
           if (direction === "LEFT") {
-            rotation = +page.rotation + 90;
-          } else {
             rotation = +page.rotation - 90;
+          } else {
+            rotation = +page.rotation + 90;
           }
           return {
             pageNumber: page.pageNumber,
@@ -72,17 +64,6 @@ const AppReducer = (state = {}, action) => {
         }
         return page;
       });
-      if (!pageExists) {
-        if (direction === "LEFT") {
-          rotation = 90;
-        } else {
-          rotation = -90;
-        }
-        oldPages.push({
-          pageNumber: pageNumberToRotate,
-          rotation
-        });
-      }
 
       return {
         ...state,
@@ -92,9 +73,9 @@ const AppReducer = (state = {}, action) => {
     case AppAction.ROTATE_ALL_PAGES:
       let rotationAll = state[AppAction.ROTATE_ALL_PAGES]?.rotation || 0;
       if (action.direction === "LEFT") {
-        rotationAll = rotationAll + 90;
-      } else {
         rotationAll = rotationAll - 90;
+      } else {
+        rotationAll = rotationAll + 90;
       }
 
       return {
@@ -115,6 +96,12 @@ const AppReducer = (state = {}, action) => {
       return {
         ...state,
         [AppAction.ZOOM_LEVEL]: action.payload
+      };
+
+    case AppAction.REARRANGE_MODAL_VISIBILITY:
+      return {
+        ...state,
+        [AppAction.REARRANGE_MODAL_VISIBILITY]: action.payload
       };
 
     case AppAction.CHANGES_SAVED:

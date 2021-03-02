@@ -4,9 +4,7 @@ export const DEFAULT_ZOOM_LEVEL = 100;
 // Create multiple pages
 export function createMultiplePages({
   doc,
-  startPage = 1,
-  totalPages,
-  rotation = 0,
+  pageList = [],
   canvasPrefix = "canvas",
   showPageNumber = false,
   pageNumberClassname = "",
@@ -20,22 +18,27 @@ export function createMultiplePages({
     viewer.innerHTML = "";
   }
 
-  for (let pageNumber = startPage; pageNumber <= totalPages; pageNumber++) {
+  for (const page of pageList) {
     const canvas = document.createElement("canvas");
-    canvas.id = `${canvasPrefix}_${pageNumber}`;
-    canvas.setAttribute("page-number", pageNumber);
-    canvas.setAttribute("rotation", rotation);
+    canvas.id = `${canvasPrefix}_${page.pageNumber}`;
+    canvas.setAttribute("page-number", page.pageNumber);
+    canvas.setAttribute("rotation", page.rotation);
     canvas.className = `mb-10 ${canvasClassname}`;
     viewer.appendChild(canvas);
 
     // Display the page number
     const pageNumberElement = document.createElement("div");
     pageNumberElement.className = pageNumberClassname;
-    pageNumberElement.innerText = `Page ${pageNumber}`;
+    pageNumberElement.innerText = `Page ${page.pageNumber}`;
     if (showPageNumber) {
       viewer.appendChild(pageNumberElement);
     }
-    renderPage({ doc, canvas, pageNumber, rotation });
+    renderPage({
+      doc,
+      canvas,
+      pageNumber: page.pageNumber,
+      rotation: page.rotation
+    });
   }
 }
 

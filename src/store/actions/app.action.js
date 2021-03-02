@@ -1,16 +1,16 @@
 export const LOADING_PAGES = "LOADING_PAGES";
 export const LOADING_THUMBNAILS = "LOADING_THUMBNAILS";
 export const PDF_URL = "PDF_URL";
-export const PDF_DOCUMENT = "PDF_DOCUMENT";
+export const PDF_FILENAME = "PDF_FILENAME";
 export const DRAWER_VISIBILITY = "DRAWER_VISIBILITY";
 export const PDF_CURRENT_PAGE = "PDF_CURRENT_PAGE";
-export const PDF_MAX_PAGE_GENERATED = "PDF_MAX_PAGE_GENERATED";
 export const PDF_TOTAL_PAGES = "PDF_TOTAL_PAGES";
 export const ROTATE_CURRENT_PAGE = "ROTATE_CURRENT_PAGE";
 export const ROTATE_SELECTED_PAGES = "ROTATE_SELECTED_PAGES";
 export const ROTATE_ALL_PAGES = "ROTATE_ALL_PAGES";
 export const PAGE_LIST = "ROTATE_PAGE_LIST";
 export const ZOOM_LEVEL = "ZOOM_LEVEL";
+export const REARRANGE_MODAL_VISIBILITY = "REARRANGE_MODAL_VISIBILITY";
 export const CHANGES_SAVED = "CHANGES_SAVED";
 
 export const setLoadingPages = loading => dispatch => {
@@ -34,10 +34,10 @@ export const setUrl = url => dispatch => {
   });
 };
 
-export const setDocument = doc => dispatch => {
+export const setFilename = filename => dispatch => {
   return dispatch({
-    type: PDF_DOCUMENT,
-    payload: doc
+    type: PDF_FILENAME,
+    payload: filename
   });
 };
 
@@ -52,13 +52,6 @@ export const setCurrentPage = currentPage => dispatch => {
   return dispatch({
     type: PDF_CURRENT_PAGE,
     payload: currentPage
-  });
-};
-
-export const setMaxPageGenerated = pageNumber => dispatch => {
-  return dispatch({
-    type: PDF_MAX_PAGE_GENERATED,
-    payload: pageNumber
   });
 };
 
@@ -100,6 +93,13 @@ export const setPageList = pageList => dispatch => {
   return dispatch({
     type: PAGE_LIST,
     payload: pageList
+  });
+};
+
+export const setRearrangeModalVisibility = isVisible => dispatch => {
+  return dispatch({
+    type: REARRANGE_MODAL_VISIBILITY,
+    payload: isVisible
   });
 };
 

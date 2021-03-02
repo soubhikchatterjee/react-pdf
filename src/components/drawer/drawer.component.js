@@ -16,40 +16,40 @@ function Drawer() {
   PdfJs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
   const dispatch = useDispatch();
-  const pdfDocument = useSelector(
-    state => state.appReducer[AppAction.PDF_DOCUMENT]
-  );
+  const url = useSelector(state => state.appReducer[AppAction.PDF_URL]);
   const showDrawer = useSelector(
     state => state.appReducer[AppAction.DRAWER_VISIBILITY]
   );
+  const pageList = useSelector(state => state.appReducer[AppAction.PAGE_LIST]);
 
-  const createPages = useCallback(({ doc, totalPages }) => {
-    createMultiplePages({
-      doc,
-      startPage: 1,
-      totalPages,
-      rotation: 360,
-      canvasPrefix: "canvas_thumbnail",
-      pdfElement: "pdf-thumbnail-viewer",
-      canvasClassname: "react__pdf--drawer-thumbnail",
-      showPageNumber: true,
-      pageNumberClassname: "react__pdf--drawer-thumbnail-page-number"
-    });
-  }, []);
-
-  // Render First two pages (if more then 2 pages otherwise render first page)
-  useEffect(() => {
-    if (pdfDocument) {
-      dispatch(AppAction.setTotalPages(pdfDocument.numPages));
-      dispatch(AppAction.setCurrentPage(1));
-      createPages({
-        doc: pdfDocument,
-        startPage: 1,
-        totalPages: pdfDocument.numPages
+  const createPages = useCallback(
+    ({ doc}) => {
+      createMultiplePages({
+        doc,
+        pageList,
+        canvasPrefix: "canvas_thumbnail",
+        pdfElement: "pdf-thumbnail-viewer",
+        canvasClassname: "react__pdf--drawer-thumbnail",
+        showPageNumber: true,
+        pageNumberClassname: "react__pdf--drawer-thumbnail-page-number"
       });
-      dispatch(AppAction.setLoadingThumbnails(false));
+    },
+    [pageList]
+  );
+
+  // Render all thumbnails
+  useEffect(() => {
+    if (url) {
+      PdfJs.getDocument(url).promise.then(doc => {
+        dispatch(AppAction.setTotalPages(doc.numPages));
+        dispatch(AppAction.setCurrentPage(1));
+        createPages({
+          doc
+        });
+        dispatch(AppAction.setLoadingThumbnails(false));
+      });
     }
-  }, [pdfDocument, dispatch, createPages]);
+  }, [url, dispatch, createPages]);
 
   return (
     <div
@@ -71,7 +71,6 @@ function Drawer() {
         className="react__pdf--drawer-thumbnails"
         onClick={e => {
           const pageNumber = e.target.getAttribute("page-number") || 1;
-          dispatch(AppAction.setLoadingPages(true));
           dispatch(AppAction.setCurrentPage(+pageNumber));
         }}
       >
