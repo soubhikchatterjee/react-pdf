@@ -57,7 +57,7 @@ function Preview() {
             doc,
             startPage: 1,
             totalPages,
-            canvasClassname: `react__pdf--canvasbox react__pdf--preview-canvas-${newZoomLevel}`
+            canvasClassname: `react__pdf--preview-canvas-${newZoomLevel}`
           });
           dispatch(AppAction.setLoadingPages(false));
           dispatch(AppAction.setMaxPageGenerated(totalPages));
@@ -98,7 +98,7 @@ function Preview() {
           doc: pdfDocument,
           startPage,
           totalPages,
-          canvasClassname: `react__pdf--canvasbox react__pdf--preview-canvas-${newZoomLevel}`
+          canvasClassname: `react__pdf--preview-canvas-${newZoomLevel}`
         });
         canvasElement = document.querySelector(`#canvas_${currentPage}`);
         dispatch(AppAction.setMaxPageGenerated(currentPage));
@@ -129,7 +129,7 @@ function Preview() {
 
       rotateSelectedPages.forEach(page => {
         const canvas = document.getElementById(`canvas_${page.pageNumber}`);
-        canvas.className = `mb-10 react__pdf--canvasbox react__pdf--preview-canvas-${newZoomLevel}`;
+        canvas.className = `mb-10 react__pdf--preview-canvas-${newZoomLevel}`;
         renderPage({
           doc: pdfDocument,
           canvas,
@@ -164,7 +164,7 @@ function Preview() {
         totalPages: pdfDocument.numPages,
         rotation: rotateAllPages.rotation,
         reset: true,
-        canvasClassname: `react__pdf--canvasbox react__pdf--preview-canvas-${newZoomLevel}`
+        canvasClassname: `react__pdf--preview-canvas-${newZoomLevel}`
       });
       dispatch(AppAction.setLoadingPages(false));
       dispatch(AppAction.setMaxPageGenerated(pdfDocument.numPages));
@@ -192,7 +192,7 @@ function Preview() {
       const newPageList = [...pageList];
       newPageList.forEach(page => {
         const canvas = document.getElementById(`canvas_${page.pageNumber}`);
-        canvas.className = `mb-10 react__pdf--canvasbox react__pdf--preview-canvas-${zoomLevel}`;
+        canvas.className = `mb-10 react__pdf--preview-canvas-${zoomLevel}`;
         if (canvas) {
           renderPage({
             doc: pdfDocument,
