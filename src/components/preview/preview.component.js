@@ -20,14 +20,14 @@ function Preview() {
   PdfJs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
   const dispatch = useDispatch();
   const url = useSelector(state => state.appReducer[AppAction.PDF_URL]);
-  const pdfDocument = useSelector(
-    state => state.appReducer[AppAction.PDF_DOCUMENT]
+  const isLoadingPages = useSelector(
+    state => state.appReducer[AppAction.LOADING_PAGES]
+  );
+  const isLoadingThumbnails = useSelector(
+    state => state.appReducer[AppAction.LOADING_THUMBNAILS]
   );
   const currentPage = useSelector(
     state => state.appReducer[AppAction.PDF_CURRENT_PAGE]
-  );
-  const maxPageGenerated = useSelector(
-    state => state.appReducer[AppAction.PDF_MAX_PAGE_GENERATED]
   );
   const rotateSelectedPages = useSelector(
     state => state.appReducer[AppAction.ROTATE_SELECTED_PAGES]
@@ -42,25 +42,25 @@ function Preview() {
 
   const createPages = useCallback(createMultiplePages, []);
 
+  const isProcessing = () => {
+    return (
+      isLoadingPages ||
+      isLoadingThumbnails ||
+      typeof isLoadingPages === "undefined" ||
+      typeof isLoadingThumbnails === "undefined"
+    );
+  };
+
   // Read documents of the pdf and set the necessary values
   useEffect(() => {
     if (url) {
+      dispatch(AppAction.setLoadingPages(true));
       PdfJs.getDocument(url)
         .promise.then(doc => {
-          dispatch(AppAction.setDocument(doc));
           dispatch(AppAction.setTotalPages(doc.numPages));
           dispatch(AppAction.setCurrentPage(1));
           const newZoomLevel = zoomLevel || DEFAULT_ZOOM_LEVEL;
           const totalPages = doc.numPages;
-
-          createPages({
-            doc,
-            startPage: 1,
-            totalPages,
-            canvasClassname: `react__pdf--preview-canvas-${newZoomLevel}`
-          });
-          dispatch(AppAction.setLoadingPages(false));
-          dispatch(AppAction.setMaxPageGenerated(totalPages));
 
           // Initialize to the final page list array
           const initialPageList = [];
@@ -72,7 +72,15 @@ function Preview() {
               zoom: newZoomLevel
             })
           );
+
+          createPages({
+            doc,
+            pageList: initialPageList,
+            canvasClassname: `react__pdf--preview-canvas-${newZoomLevel}`
+          });
+
           dispatch(AppAction.setPageList(initialPageList));
+          dispatch(AppAction.setLoadingPages(false));
         })
         .catch(e => console.error(e));
     }
@@ -82,72 +90,45 @@ function Preview() {
 
   // Jump to a page based on currentPage
   useEffect(() => {
-    if (pdfDocument && currentPage && maxPageGenerated) {
-      const newZoomLevel = zoomLevel || DEFAULT_ZOOM_LEVEL;
+    if (currentPage) {
       let canvasElement = document.querySelector(`#canvas_${currentPage}`);
-
-      if (!canvasElement) {
-        let startPage = currentPage,
-          totalPages = maxPageGenerated;
-        if (currentPage > maxPageGenerated) {
-          startPage = maxPageGenerated + 1;
-          totalPages = currentPage;
-        }
-
-        createPages({
-          doc: pdfDocument,
-          startPage,
-          totalPages,
-          canvasClassname: `react__pdf--preview-canvas-${newZoomLevel}`
-        });
-        canvasElement = document.querySelector(`#canvas_${currentPage}`);
-        dispatch(AppAction.setMaxPageGenerated(currentPage));
-
-        // Add a new page to the page list array
-        const finalPageList = [...pageList];
-        finalPageList.push({
-          pageNumber: pageList.length + 1,
-          rotation: 0,
-          order: pageList.length + 1,
-          zoom: newZoomLevel
-        });
-        dispatch(AppAction.setPageList(finalPageList));
+      if (canvasElement) {
+        canvasElement.scrollIntoView({ behavior: "smooth" });
       }
-      dispatch(AppAction.setLoadingPages(false));
-      canvasElement.scrollIntoView({ behavior: "smooth" });
     }
 
     // eslint-disable-next-line
-  }, [pdfDocument, currentPage, maxPageGenerated, createPages, dispatch]);
+  }, [currentPage]);
 
   // Rotate selected page
   useEffect(() => {
-    if (rotateSelectedPages) {
+    if (rotateSelectedPages && !isProcessing()) {
       dispatch(AppAction.setLoadingPages(true));
-      const finalPageList = [...pageList];
       const newZoomLevel = zoomLevel || DEFAULT_ZOOM_LEVEL;
+      const finalPageList = [...pageList];
 
-      rotateSelectedPages.forEach(page => {
-        const canvas = document.getElementById(`canvas_${page.pageNumber}`);
-        canvas.className = `mb-10 react__pdf--preview-canvas-${newZoomLevel}`;
-        renderPage({
-          doc: pdfDocument,
-          canvas,
-          pageNumber: page.pageNumber,
-          rotation: page.rotation
+      PdfJs.getDocument(url).promise.then(doc => {
+        rotateSelectedPages.forEach(page => {
+          const canvas = document.getElementById(`canvas_${page.pageNumber}`);
+          canvas.className = `mb-10 react__pdf--preview-canvas-${newZoomLevel}`;
+          renderPage({
+            doc,
+            canvas,
+            pageNumber: page.pageNumber,
+            rotation: page.rotation
+          });
+
+          // Update page list
+          const pageListItem = finalPageList.find(
+            pageListObj => pageListObj.pageNumber === page.pageNumber
+          );
+          if (pageListItem) {
+            pageListItem.rotation = page.rotation;
+            dispatch(AppAction.setPageList(finalPageList));
+          }
         });
-
-        // Update page list
-        const pageListItem = finalPageList.find(
-          pageListObj => pageListObj.pageNumber === page.pageNumber
-        );
-        if (pageListItem) {
-          pageListItem.rotation = page.rotation;
-          dispatch(AppAction.setPageList(finalPageList));
-        }
+        dispatch(AppAction.setLoadingPages(false));
       });
-      dispatch(AppAction.setLoadingPages(false));
-      dispatch(AppAction.setLoadingPages(false));
     }
 
     // eslint-disable-next-line
@@ -155,31 +136,27 @@ function Preview() {
 
   // Rotate All pages
   useEffect(() => {
-    if (rotateAllPages) {
+    if (rotateAllPages && !isProcessing()) {
       const newZoomLevel = zoomLevel || DEFAULT_ZOOM_LEVEL;
       dispatch(AppAction.setLoadingPages(true));
-      createPages({
-        doc: pdfDocument,
-        startPage: 1,
-        totalPages: pdfDocument.numPages,
-        rotation: rotateAllPages.rotation,
-        reset: true,
-        canvasClassname: `react__pdf--preview-canvas-${newZoomLevel}`
-      });
-      dispatch(AppAction.setLoadingPages(false));
-      dispatch(AppAction.setMaxPageGenerated(pdfDocument.numPages));
 
-      // Initialize to the final page list array
-      const initialPageList = [];
-      range(1, pdfDocument.numPages).forEach(pageNumber =>
-        initialPageList.push({
-          pageNumber,
-          rotation: rotateAllPages.rotation,
-          zoom: newZoomLevel,
-          order: pageNumber
-        })
-      );
-      dispatch(AppAction.setPageList(initialPageList));
+      PdfJs.getDocument(url).promise.then(doc => {
+        // Initialize to the final page list array
+        const finalPageList = [...pageList];
+        finalPageList.forEach(page => {
+          page.rotation = rotateAllPages.rotation;
+        });
+
+        createPages({
+          doc,
+          pageList: finalPageList,
+          reset: true,
+          canvasClassname: `react__pdf--preview-canvas-${newZoomLevel}`
+        });
+
+        dispatch(AppAction.setPageList(finalPageList));
+        dispatch(AppAction.setLoadingPages(false));
+      });
     }
 
     // eslint-disable-next-line
@@ -187,28 +164,51 @@ function Preview() {
 
   // Zoom till max generated pages
   useEffect(() => {
-    if (zoomLevel && pageList) {
+    if (zoomLevel && !isProcessing()) {
       dispatch(AppAction.setLoadingPages(true));
-      const newPageList = [...pageList];
-      newPageList.forEach(page => {
-        const canvas = document.getElementById(`canvas_${page.pageNumber}`);
-        canvas.className = `mb-10 react__pdf--preview-canvas-${zoomLevel}`;
-        if (canvas) {
-          renderPage({
-            doc: pdfDocument,
-            canvas,
-            pageNumber: page.pageNumber,
-            rotation: page.rotation
-          });
-          page.zoom = zoomLevel;
-        }
+
+      PdfJs.getDocument(url).promise.then(doc => {
+        const newPageList = [...pageList];
+        newPageList.forEach(page => {
+          const canvas = document.getElementById(`canvas_${page.pageNumber}`);
+          if (canvas) {
+            canvas.className = `mb-10 react__pdf--preview-canvas-${zoomLevel}`;
+            renderPage({
+              doc,
+              canvas,
+              pageNumber: page.pageNumber,
+              rotation: page.rotation
+            });
+          }
+        });
+        dispatch(AppAction.setLoadingPages(false));
       });
-      dispatch(AppAction.setPageList(newPageList));
-      dispatch(AppAction.setLoadingPages(false));
     }
 
     // eslint-disable-next-line
   }, [zoomLevel, dispatch]);
+
+  // Re-arrange pages
+  useEffect(() => {
+    if (pageList && !isProcessing()) {
+      const newZoomLevel = zoomLevel || DEFAULT_ZOOM_LEVEL;
+      dispatch(AppAction.setLoadingPages(true));
+      PdfJs.getDocument(url).promise.then(doc => {
+        const newPageList = [...pageList].sort((a, b) => a.order - b.order);
+        // Re create the pages
+        createPages({
+          doc,
+          pageList: newPageList,
+          reset: true,
+          canvasClassname: `react__pdf--preview-canvas-${newZoomLevel}`
+        });
+
+        dispatch(AppAction.setLoadingPages(false));
+      });
+    }
+
+    // eslint-disable-next-line
+  }, [pageList]);
 
   return <div id="pdf-viewer" className="react__pdf--preview"></div>;
 }

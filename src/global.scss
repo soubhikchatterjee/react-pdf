@@ -9,6 +9,7 @@
   --canvas-bg-color: #808e9b;
   --toolbar-color: #ffffff;
   --icon-hover-color: #eaeded;
+  --box-border-color: #bdc3c7;
 }
 
 @font-face {
@@ -19,12 +20,6 @@
 @font-face {
   font-family: "Poppins-Regular";
   src: url("./resources/fonts/Poppins-Regular.ttf");
-}
-
-// todo remove
-.outer-app {
-  // width: 700px;
-  // height: 600px;
 }
 
 .react__pdf--app {
@@ -39,6 +34,11 @@
 
 .clear-fix {
   clear: both;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.4;
 }
 
 // Margins
