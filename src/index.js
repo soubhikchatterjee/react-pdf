@@ -12,7 +12,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <div className="outer-app">
-        <App url="http://127.0.0.1:5500/test4.pdf" />
+        <App url="http://127.0.0.1:5500/test3.pdf" />
       </div>
     </Provider>
   </React.StrictMode>,
