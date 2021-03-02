@@ -4,10 +4,7 @@ export const DEFAULT_ZOOM_LEVEL = 100;
 // Create multiple pages
 export function createMultiplePages({
   doc,
-  // startPage = 1,
-  // totalPages,
   pageList = [],
-  // rotation = 0,
   canvasPrefix = "canvas",
   showPageNumber = false,
   pageNumberClassname = "",

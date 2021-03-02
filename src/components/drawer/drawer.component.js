@@ -23,13 +23,10 @@ function Drawer() {
   const pageList = useSelector(state => state.appReducer[AppAction.PAGE_LIST]);
 
   const createPages = useCallback(
-    ({ doc, totalPages }) => {
+    ({ doc}) => {
       createMultiplePages({
         doc,
         pageList,
-        // startPage: 1,
-        // totalPages,
-        rotation: 360,
         canvasPrefix: "canvas_thumbnail",
         pdfElement: "pdf-thumbnail-viewer",
         canvasClassname: "react__pdf--drawer-thumbnail",
@@ -47,9 +44,7 @@ function Drawer() {
         dispatch(AppAction.setTotalPages(doc.numPages));
         dispatch(AppAction.setCurrentPage(1));
         createPages({
-          doc,
-          startPage: 1,
-          totalPages: doc.numPages
+          doc
         });
         dispatch(AppAction.setLoadingThumbnails(false));
       });
