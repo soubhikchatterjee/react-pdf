@@ -6,7 +6,6 @@ import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
 // Custom components
 import * as AppAction from "store/actions/app.action";
 import {
-  INITIAL_MAX_PAGES,
   DEFAULT_ZOOM_LEVEL,
   createMultiplePages,
   renderPage,
@@ -43,7 +42,7 @@ function Preview() {
 
   const createPages = useCallback(createMultiplePages, []);
 
-  // Render First two pages (if more then 2 pages otherwise render first page)
+  // Read documents of the pdf and set the necessary values
   useEffect(() => {
     if (url) {
       PdfJs.getDocument(url)
@@ -52,14 +51,13 @@ function Preview() {
           dispatch(AppAction.setTotalPages(doc.numPages));
           dispatch(AppAction.setCurrentPage(1));
           const newZoomLevel = zoomLevel || DEFAULT_ZOOM_LEVEL;
-          const totalPages =
-            doc.numPages > INITIAL_MAX_PAGES ? INITIAL_MAX_PAGES : doc.numPages;
+          const totalPages = doc.numPages;
 
           createPages({
             doc,
             startPage: 1,
             totalPages,
-            canvasClassname: `react__pdf--preview-canvas-${newZoomLevel}`
+            canvasClassname: `react__pdf--canvasbox react__pdf--preview-canvas-${newZoomLevel}`
           });
           dispatch(AppAction.setLoadingPages(false));
           dispatch(AppAction.setMaxPageGenerated(totalPages));
@@ -85,7 +83,6 @@ function Preview() {
   // Jump to a page based on currentPage
   useEffect(() => {
     if (pdfDocument && currentPage && maxPageGenerated) {
-      console.log("jump");
       const newZoomLevel = zoomLevel || DEFAULT_ZOOM_LEVEL;
       let canvasElement = document.querySelector(`#canvas_${currentPage}`);
 
@@ -101,7 +98,7 @@ function Preview() {
           doc: pdfDocument,
           startPage,
           totalPages,
-          canvasClassname: `react__pdf--preview-canvas-${newZoomLevel}`
+          canvasClassname: `react__pdf--canvasbox react__pdf--preview-canvas-${newZoomLevel}`
         });
         canvasElement = document.querySelector(`#canvas_${currentPage}`);
         dispatch(AppAction.setMaxPageGenerated(currentPage));
@@ -126,14 +123,13 @@ function Preview() {
   // Rotate selected page
   useEffect(() => {
     if (rotateSelectedPages) {
-      console.log("rotate single");
       dispatch(AppAction.setLoadingPages(true));
       const finalPageList = [...pageList];
       const newZoomLevel = zoomLevel || DEFAULT_ZOOM_LEVEL;
 
       rotateSelectedPages.forEach(page => {
         const canvas = document.getElementById(`canvas_${page.pageNumber}`);
-        canvas.className = `mb-10 react__pdf--preview-canvas-${newZoomLevel}`;
+        canvas.className = `mb-10 react__pdf--canvasbox react__pdf--preview-canvas-${newZoomLevel}`;
         renderPage({
           doc: pdfDocument,
           canvas,
@@ -160,7 +156,6 @@ function Preview() {
   // Rotate All pages
   useEffect(() => {
     if (rotateAllPages) {
-      console.log("rotate all");
       const newZoomLevel = zoomLevel || DEFAULT_ZOOM_LEVEL;
       dispatch(AppAction.setLoadingPages(true));
       createPages({
@@ -169,7 +164,7 @@ function Preview() {
         totalPages: pdfDocument.numPages,
         rotation: rotateAllPages.rotation,
         reset: true,
-        canvasClassname: `react__pdf--preview-canvas-${newZoomLevel}`
+        canvasClassname: `react__pdf--canvasbox react__pdf--preview-canvas-${newZoomLevel}`
       });
       dispatch(AppAction.setLoadingPages(false));
       dispatch(AppAction.setMaxPageGenerated(pdfDocument.numPages));
@@ -193,19 +188,20 @@ function Preview() {
   // Zoom till max generated pages
   useEffect(() => {
     if (zoomLevel && pageList) {
-      console.log("zoom");
       dispatch(AppAction.setLoadingPages(true));
       const newPageList = [...pageList];
       newPageList.forEach(page => {
         const canvas = document.getElementById(`canvas_${page.pageNumber}`);
-        canvas.className = `mb-10 react__pdf--preview-canvas-${zoomLevel}`;
-        renderPage({
-          doc: pdfDocument,
-          canvas,
-          pageNumber: page.pageNumber,
-          rotation: page.rotation
-        });
-        page.zoom = zoomLevel;
+        canvas.className = `mb-10 react__pdf--canvasbox react__pdf--preview-canvas-${zoomLevel}`;
+        if (canvas) {
+          renderPage({
+            doc: pdfDocument,
+            canvas,
+            pageNumber: page.pageNumber,
+            rotation: page.rotation
+          });
+          page.zoom = zoomLevel;
+        }
       });
       dispatch(AppAction.setPageList(newPageList));
       dispatch(AppAction.setLoadingPages(false));
