@@ -42,7 +42,6 @@ function Drawer() {
     if (url) {
       PdfJs.getDocument(url).promise.then(doc => {
         dispatch(AppAction.setTotalPages(doc.numPages));
-        dispatch(AppAction.setCurrentPage(1));
         createPages({
           doc
         });
@@ -70,8 +69,9 @@ function Drawer() {
         id="pdf-thumbnail-viewer"
         className="react__pdf--drawer-thumbnails"
         onClick={e => {
-          const pageNumber = e.target.getAttribute("page-number") || 1;
-          dispatch(AppAction.setCurrentPage(+pageNumber));
+          const pageOrderNumber = e.target.getAttribute("page-order") || 1;
+          dispatch(AppAction.setCurrentPage(+pageOrderNumber));
+          dispatch(AppAction.setForceScroll(true));
         }}
       >
         {/* Placeholder for thumbnails */}

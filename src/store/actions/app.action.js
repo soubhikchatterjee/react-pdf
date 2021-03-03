@@ -4,9 +4,9 @@ export const PDF_URL = "PDF_URL";
 export const PDF_FILENAME = "PDF_FILENAME";
 export const DRAWER_VISIBILITY = "DRAWER_VISIBILITY";
 export const PDF_CURRENT_PAGE = "PDF_CURRENT_PAGE";
+export const PDF_FORCE_SCROLL = "PDF_FORCE_SCROLL";
 export const PDF_TOTAL_PAGES = "PDF_TOTAL_PAGES";
-export const ROTATE_CURRENT_PAGE = "ROTATE_CURRENT_PAGE";
-export const ROTATE_SELECTED_PAGES = "ROTATE_SELECTED_PAGES";
+export const ROTATE_SELECTED_PAGE = "ROTATE_SELECTED_PAGE";
 export const ROTATE_ALL_PAGES = "ROTATE_ALL_PAGES";
 export const PAGE_LIST = "ROTATE_PAGE_LIST";
 export const ZOOM_LEVEL = "ZOOM_LEVEL";
@@ -55,6 +55,13 @@ export const setCurrentPage = currentPage => dispatch => {
   });
 };
 
+export const setForceScroll = forceScroll => dispatch => {
+  return dispatch({
+    type: PDF_FORCE_SCROLL,
+    payload: forceScroll
+  });
+};
+
 export const setTotalPages = totalPages => dispatch => {
   return dispatch({
     type: PDF_TOTAL_PAGES,
@@ -62,15 +69,11 @@ export const setTotalPages = totalPages => dispatch => {
   });
 };
 
-export const setRotateCurrentPage = ({
-  currentPage,
-  direction
-}) => dispatch => {
+export const setRotateCurrentPage = rotateObj => dispatch => {
   dispatch(setChangesSaved(false));
   return dispatch({
-    type: ROTATE_SELECTED_PAGES,
-    payload: currentPage,
-    direction
+    type: ROTATE_SELECTED_PAGE,
+    payload: rotateObj
   });
 };
 

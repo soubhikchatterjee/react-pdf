@@ -10,15 +10,14 @@ import "./rearrange.styles.scss";
 
 function Rearrange() {
   const dispatch = useDispatch();
-  const isVisible = useSelector(
-    state => state.appReducer[AppAction.REARRANGE_MODAL_VISIBILITY]
-  );
+  const pageList = useSelector(state => state.appReducer[AppAction.PAGE_LIST]);
 
   return (
     <div
       onClick={() => {
-        dispatch(AppAction.setRearrangeModalVisibility(!isVisible));
-        dispatch(AppAction.setCurrentPage(1));
+        dispatch(AppAction.setRearrangeModalVisibility(true));
+        dispatch(AppAction.setCurrentPage(pageList[0].order));
+        dispatch(AppAction.setForceScroll(true));
       }}
       className="react__pdf-rearrange"
     >

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useLayoutEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as PdfJs from "pdfjs-dist";
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
@@ -29,8 +29,11 @@ function Preview() {
   const currentPage = useSelector(
     state => state.appReducer[AppAction.PDF_CURRENT_PAGE]
   );
-  const rotateSelectedPages = useSelector(
-    state => state.appReducer[AppAction.ROTATE_SELECTED_PAGES]
+  const forceScroll = useSelector(
+    state => state.appReducer[AppAction.PDF_FORCE_SCROLL]
+  );
+  const rotateSelectedPage = useSelector(
+    state => state.appReducer[AppAction.ROTATE_SELECTED_PAGE]
   );
   const rotateAllPages = useSelector(
     state => state.appReducer[AppAction.ROTATE_ALL_PAGES]
@@ -90,49 +93,59 @@ function Preview() {
 
   // Jump to a page based on currentPage
   useEffect(() => {
-    if (currentPage) {
-      let canvasElement = document.querySelector(`#canvas_${currentPage}`);
+    if (currentPage && forceScroll) {
+      let canvasElement = document.querySelector(
+        `canvas:not(.react__pdf--drawer-thumbnail)[page-order="${currentPage}"]`
+      );
       if (canvasElement) {
         canvasElement.scrollIntoView({ behavior: "smooth" });
+        dispatch(AppAction.setForceScroll(false));
       }
     }
 
     // eslint-disable-next-line
-  }, [currentPage]);
+  }, [currentPage, forceScroll]);
 
   // Rotate selected page
   useEffect(() => {
-    if (rotateSelectedPages && !isProcessing()) {
+    if (rotateSelectedPage && !isProcessing()) {
       dispatch(AppAction.setLoadingPages(true));
       const newZoomLevel = zoomLevel || DEFAULT_ZOOM_LEVEL;
-      const finalPageList = [...pageList];
+
+      function updateCanvas(doc, page) {
+        const canvas = document.querySelector(
+          `canvas:not(.react__pdf--drawer-thumbnail)[page-order="${page.order}"]`
+        );
+        canvas.className = `mb-10 react__pdf--preview-canvas-${newZoomLevel}`;
+        renderPage({
+          doc,
+          canvas,
+          pageNumber: page.pageNumber,
+          rotation: page.rotation
+        });
+      }
 
       PdfJs.getDocument(url).promise.then(doc => {
-        rotateSelectedPages.forEach(page => {
-          const canvas = document.getElementById(`canvas_${page.pageNumber}`);
-          canvas.className = `mb-10 react__pdf--preview-canvas-${newZoomLevel}`;
-          renderPage({
-            doc,
-            canvas,
-            pageNumber: page.pageNumber,
-            rotation: page.rotation
-          });
-
-          // Update page list
-          const pageListItem = finalPageList.find(
-            pageListObj => pageListObj.pageNumber === page.pageNumber
-          );
-          if (pageListItem) {
-            pageListItem.rotation = page.rotation;
-            dispatch(AppAction.setPageList(finalPageList));
+        const finalPageList = [...pageList];
+        finalPageList.forEach(page => {
+          if (page.order === rotateSelectedPage.currentPage) {
+            if (rotateSelectedPage.direction === "LEFT") {
+              page.rotation = +page.rotation - 90;
+              updateCanvas(doc, page);
+            } else {
+              page.rotation = +page.rotation + 90;
+              updateCanvas(doc, page);
+            }
           }
         });
+
+        dispatch(AppAction.setPageList(finalPageList));
         dispatch(AppAction.setLoadingPages(false));
       });
     }
 
     // eslint-disable-next-line
-  }, [rotateSelectedPages, dispatch]);
+  }, [rotateSelectedPage, dispatch]);
 
   // Rotate All pages
   useEffect(() => {
@@ -155,6 +168,8 @@ function Preview() {
         });
 
         dispatch(AppAction.setPageList(finalPageList));
+        dispatch(AppAction.setForceScroll(true));
+        dispatch(AppAction.setCurrentPage(1));
         dispatch(AppAction.setLoadingPages(false));
       });
     }
@@ -184,7 +199,6 @@ function Preview() {
         dispatch(AppAction.setLoadingPages(false));
       });
     }
-
     // eslint-disable-next-line
   }, [zoomLevel, dispatch]);
 
@@ -195,7 +209,7 @@ function Preview() {
       dispatch(AppAction.setLoadingPages(true));
       PdfJs.getDocument(url).promise.then(doc => {
         const newPageList = [...pageList].sort((a, b) => a.order - b.order);
-        // Re create the pages
+        // Re-create the pages
         createPages({
           doc,
           pageList: newPageList,
@@ -203,6 +217,8 @@ function Preview() {
           canvasClassname: `react__pdf--preview-canvas-${newZoomLevel}`
         });
 
+        dispatch(AppAction.setForceScroll(true));
+        dispatch(AppAction.setCurrentPage(newPageList[0].order));
         dispatch(AppAction.setLoadingPages(false));
       });
     }
@@ -210,7 +226,15 @@ function Preview() {
     // eslint-disable-next-line
   }, [pageList]);
 
-  return <div id="pdf-viewer" className="react__pdf--preview"></div>;
+  return (
+    <div
+      onClick={() => {
+        dispatch(AppAction.setDrawerVisibility(false));
+      }}
+      id="pdf-viewer"
+      className="react__pdf--preview"
+    ></div>
+  );
 }
 
 export default Preview;
