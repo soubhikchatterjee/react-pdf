@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useLayoutEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as PdfJs from "pdfjs-dist";
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
