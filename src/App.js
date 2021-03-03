@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Custom components
+import * as AppAction from "store/actions/app.action";
 import Preview from "components/preview/preview.component";
 import Toolbar from "components/toolbar/toolbar.component";
 import Drawer from "components/drawer/drawer.component";
 import Rearrange from "components/rearrange/rearrange.component";
 import Spinner from "components/spinner/spinner.component";
 import NotFound from "components/404/404.component";
-
-// Custom components
-import * as AppAction from "store/actions/app.action";
+import debounce from "helpers/debounce";
 
 // Styles
 import "./global.scss";
@@ -33,8 +32,7 @@ function App({ url }) {
     if (url) {
       fetch(url)
         .then(res => {
-
-          const filename = url.split('/').pop()
+          const filename = url.split("/").pop();
           dispatch(AppAction.setUrl(url));
           dispatch(AppAction.setFilename(filename));
           dispatch(AppAction.setLoadingPages(true));
@@ -46,6 +44,29 @@ function App({ url }) {
     }
   }, [url, dispatch]);
 
+  // When the user scrolls through the pages, we need to set the current page number
+  useLayoutEffect(() => {
+    window.addEventListener("scroll", () => {
+      let canvases = document.querySelectorAll("canvas");
+      canvases.forEach(canvas => {
+        const canvasElement = new IntersectionObserver(
+          entries => {
+            if (entries[0].isIntersecting) {
+              debounce(() => {
+                dispatch(
+                  AppAction.setCurrentPage(+canvas.getAttribute("page-order"))
+                );
+              }, 400);
+            }
+          },
+          {
+            threshold: 0.3
+          }
+        );
+        canvasElement.observe(canvas);
+      });
+    });
+  }, [dispatch]);
 
   return (
     <div className="react__pdf--app">
@@ -56,7 +77,7 @@ function App({ url }) {
       <Drawer />
       {isVisibleRearrangeModal && <Rearrange />}
       {!error && <Preview />}
-      {error && <NotFound error={error}/>}
+      {error && <NotFound error={error} />}
     </div>
   );
 }

@@ -27,6 +27,7 @@ function Navigation() {
             currentPageNumber = 1;
           }
 
+          dispatch(AppAction.setForceScroll(true));
           dispatch(AppAction.setCurrentPage(currentPageNumber));
         }}
       ></i>
@@ -46,6 +47,7 @@ function Navigation() {
             currentPageNumber = totalPages;
           }
 
+          dispatch(AppAction.setForceScroll(true));
           dispatch(AppAction.setCurrentPage(currentPageNumber));
         }}
       ></i>
