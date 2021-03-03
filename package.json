@@ -1,6 +1,6 @@
 {
   "name": "@soubhikchatterjee/react-pdf",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Soubhik Chatterjee <soubhik@chatterjee.pw>",
   "contributors": [
     {
@@ -9,10 +9,10 @@
       "url": "https://soubhik.chatterjee.pw"
     }
   ],
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "build/index.js",
+  "module": "build/index.js",
   "files": [
-    "dist"
+    "build"
   ],
   "repository": {
     "type": "git",
@@ -30,9 +30,6 @@
   ],
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
     "classnames": "^2.2.6",
     "pdfjs-dist": "^2.6.347",
     "react": "^17.0.1",
@@ -41,13 +38,12 @@
     "react-scripts": "4.0.3",
     "react-tooltip": "^4.2.14",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0",
-    "web-vitals": "^1.0.1"
+    "redux-thunk": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build-dev": "react-scripts build",
-    "build": "rimraf dist && NODE_ENV=production babel src/lib --out-dir dist --copy-files --ignore \"src/lib/server/server.js\",__tests__,spec.js,test.js,__snapshots__"
+    "build": "NODE_ENV=production react-scripts build",
+    "publish": "npm publish --access public"
   },
   "eslintConfig": {
     "extends": [
