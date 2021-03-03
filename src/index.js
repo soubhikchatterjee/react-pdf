@@ -1,22 +1,7 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import App from "./App";
-import store from "store/store";
-import reportWebVitals from "./reportWebVitals";
+import ReactPDF from "./ReactPDF";
+import * as ReactPDFActions from "store/actions/app.action";
+import ReactPDFReducers from "store/reducers/app.reducer";
 
-// Styles
-import "@fortawesome/fontawesome-free/css/all.min.css";
-
-ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <div className="outer-app">
-        <App url="http://127.0.0.1:5500/test4.pdf" />
-      </div>
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById("root")
-);
-
-reportWebVitals(console.info);
+export default ReactPDF;
+export const actions = ReactPDFActions;
+export const reducers = ReactPDFReducers;

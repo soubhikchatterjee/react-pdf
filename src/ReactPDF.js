@@ -14,7 +14,7 @@ import debounce from "helpers/debounce";
 // Styles
 import "./global.scss";
 
-function App({ url }) {
+function ReactPDF({ url }) {
   const dispatch = useDispatch();
   const isLoadingPages = useSelector(
     state => state.appReducer[AppAction.LOADING_PAGES]
@@ -46,7 +46,7 @@ function App({ url }) {
 
   // When the user scrolls through the pages, we need to set the current page number
   useLayoutEffect(() => {
-    window.addEventListener("scroll", () => {
+    const scrollListener = () => {
       let canvases = document.querySelectorAll("canvas");
       canvases.forEach(canvas => {
         const canvasElement = new IntersectionObserver(
@@ -65,7 +65,10 @@ function App({ url }) {
         );
         canvasElement.observe(canvas);
       });
-    });
+    };
+    window.addEventListener("scroll", scrollListener);
+
+    return () => window.removeEventListener("scroll", scrollListener);
   }, [dispatch]);
 
   return (
@@ -82,4 +85,4 @@ function App({ url }) {
   );
 }
 
-export default App;
+export default ReactPDF;
