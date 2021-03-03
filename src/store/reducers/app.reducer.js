@@ -38,36 +38,22 @@ const AppReducer = (state = {}, action) => {
         [AppAction.PDF_CURRENT_PAGE]: action.payload
       };
 
+    case AppAction.PDF_FORCE_SCROLL:
+      return {
+        ...state,
+        [AppAction.PDF_FORCE_SCROLL]: action.payload
+      };
+
     case AppAction.PDF_TOTAL_PAGES:
       return {
         ...state,
         [AppAction.PDF_TOTAL_PAGES]: action.payload
       };
-    case AppAction.ROTATE_SELECTED_PAGES:
-      const pageNumberToRotate = action.payload;
-      const direction = action.direction;
 
-      let oldPages = [...state[AppAction.PAGE_LIST]] || [];
-      let rotation;
-
-      oldPages = oldPages.map(page => {
-        if (page.pageNumber === pageNumberToRotate) {
-          if (direction === "LEFT") {
-            rotation = +page.rotation - 90;
-          } else {
-            rotation = +page.rotation + 90;
-          }
-          return {
-            pageNumber: page.pageNumber,
-            rotation
-          };
-        }
-        return page;
-      });
-
+    case AppAction.ROTATE_SELECTED_PAGE:
       return {
         ...state,
-        [AppAction.ROTATE_SELECTED_PAGES]: oldPages
+        [AppAction.ROTATE_SELECTED_PAGE]: action.payload
       };
 
     case AppAction.ROTATE_ALL_PAGES:

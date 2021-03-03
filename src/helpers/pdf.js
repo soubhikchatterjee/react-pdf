@@ -18,10 +18,10 @@ export function createMultiplePages({
     viewer.innerHTML = "";
   }
 
-  for (const page of pageList) {
+  for (const [key, page] of pageList.entries()) {
     const canvas = document.createElement("canvas");
     canvas.id = `${canvasPrefix}_${page.pageNumber}`;
-    canvas.setAttribute("page-number", page.pageNumber);
+    canvas.setAttribute("page-order", key + 1);
     canvas.setAttribute("rotation", page.rotation);
     canvas.className = `mb-10 ${canvasClassname}`;
     viewer.appendChild(canvas);
