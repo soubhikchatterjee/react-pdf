@@ -1,6 +1,6 @@
 {
   "name": "@soubhikchatterjee/react-pdf",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Soubhik Chatterjee <soubhik@chatterjee.pw>",
   "contributors": [
     {
@@ -43,7 +43,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "NODE_ENV=production react-scripts build",
-    "publish": "npm publish --access public"
+    "deploy": "npm publish --access public"
   },
   "eslintConfig": {
     "extends": [
