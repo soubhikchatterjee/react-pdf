@@ -9,10 +9,10 @@
       "url": "https://soubhik.chatterjee.pw"
     }
   ],
-  "main": "build/index.js",
-  "module": "build/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "files": [
-    "build"
+    "dist"
   ],
   "repository": {
     "type": "git",
