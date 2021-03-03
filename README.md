@@ -1,15 +1,27 @@
-# Getting Started with Create React App
+# React PDF Viewer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+View PDF files in your react project. Supports the following features:
 
-## Available Scripts
+- Zoom
+- Next and Prev buttons to navigate pages
+- Rotate a page
+- Page scrolling
+- Rearrange
+- Thumbnails
 
-In the project directory, you can run:
+## Install
 
-### `yarn start`
+> npm i @soubhikchatterjee/react-pdf
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Usage
+
+```
+import ReactPDF from "@soubhikchatterjee/react-pdf";
+
+ <ReactPDF
+    url="http://www.example.com/sample.pdf"
+ />
+```
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
