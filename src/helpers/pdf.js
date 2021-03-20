@@ -8,11 +8,14 @@ export function createMultiplePages({
   canvasPrefix = "canvas",
   showPageNumber = false,
   pageNumberClassname = "",
-  pdfElement = "pdf-viewer",
+  pdfElementId = "pdf-viewer",
   canvasClassname = "react__pdf--preview-canvas",
+  pageLabel = "Page",
   reset = false
 }) {
-  const viewer = document.getElementById(pdfElement);
+  const viewer = document.getElementById(pdfElementId);
+
+  if (!viewer) return;
 
   if (reset) {
     viewer.innerHTML = "";
@@ -27,10 +30,10 @@ export function createMultiplePages({
     viewer.appendChild(canvas);
 
     // Display the page number
-    const pageNumberElement = document.createElement("div");
-    pageNumberElement.className = pageNumberClassname;
-    pageNumberElement.innerText = `Page ${page.pageNumber}`;
     if (showPageNumber) {
+      const pageNumberElement = document.createElement("div");
+      pageNumberElement.className = pageNumberClassname;
+      pageNumberElement.innerText = `${pageLabel} ${page.pageNumber}`;
       viewer.appendChild(pageNumberElement);
     }
     renderPage({
@@ -60,7 +63,7 @@ export function renderPage({ doc, canvas, pageNumber, rotation }) {
         viewport: viewport
       });
     })
-    .catch(e => console.error(e));
+    .catch(e => console.error("renderSinglePage@ReactPDFHelper", e));
 }
 
 export function range(start, end) {

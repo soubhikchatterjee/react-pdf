@@ -1,6 +1,6 @@
 {
   "name": "@soubhikchatterjee/react-pdf",
-  "version": "0.1.2",
+  "version": "0.1.18",
   "author": "Soubhik Chatterjee <soubhik@chatterjee.pw>",
   "contributors": [
     {
@@ -14,6 +14,22 @@
   "files": [
     "dist"
   ],
+  "babel": {
+    "presets": [
+      "@babel/react"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ],
+      [
+        "@babel/plugin-proposal-optional-chaining"
+      ]
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/soubhikchatterjee/react-pdf.git"
@@ -28,22 +44,23 @@
     "scroll pdf pages",
     "rearrange pdf pages"
   ],
-  "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.2",
+  "peerDependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "classnames": "^2.2.6",
     "pdfjs-dist": "^2.6.347",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
     "react-redux": "^7.2.2",
-    "react-scripts": "4.0.3",
-    "react-tooltip": "^4.2.14",
+    "react-scripts": "3.4.1",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "react-tooltip": "^4.2.15"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "NODE_ENV=production react-scripts build",
-    "deploy": "npm publish --access public"
+    "build:dev": "NODE_ENV=production react-scripts build",
+    "build": "rm -rf dist && mkdir dist &&  babel src -d dist --copy-files",
+    "publish:npm": "npm publish --access public"
   },
   "eslintConfig": {
     "extends": [
@@ -64,6 +81,13 @@
     ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.13.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.13.8",
+    "@babel/preset-react": "^7.12.13",
+    "babel-preset-react-app": "^10.0.0",
     "node-sass": "^5.0.0"
+  },
+  "dependencies": {
+    "react-tooltip": "^4.2.15"
   }
 }

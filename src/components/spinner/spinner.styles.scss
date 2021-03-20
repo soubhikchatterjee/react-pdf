@@ -1,5 +1,5 @@
 .react__pdf--spinner {
-  position: fixed;
+  position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
@@ -14,6 +14,8 @@
 
 .lds-dual-ring {
   display: inline-block;
+  position: fixed;
+  top: 20rem;
   width: 80px;
   height: 80px;
 }

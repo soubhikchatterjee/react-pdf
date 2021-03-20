@@ -5,8 +5,11 @@ import * as PdfJs from "pdfjs-dist";
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
 
 // Custom components
-import * as AppAction from "store/actions/app.action";
-import { createMultiplePages } from "helpers/pdf";
+import * as AppAction from "../../store/actions/app.action";
+import Spinner from "../spinner/spinner.component";
+import { createMultiplePages } from "../../helpers/pdf";
+
+import Translate from "../../helpers/translate";
 
 // Styles
 import "./drawer.styles.scss";
@@ -16,45 +19,67 @@ function Drawer() {
   PdfJs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
   const dispatch = useDispatch();
-  const url = useSelector(state => state.appReducer[AppAction.PDF_URL]);
-  const showDrawer = useSelector(
-    state => state.appReducer[AppAction.DRAWER_VISIBILITY]
+  const uniqueId = useSelector(
+    (state) => state.appReducer[AppAction.PDF_UNIQUE_ID]
   );
-  const pageList = useSelector(state => state.appReducer[AppAction.PAGE_LIST]);
+  const url = useSelector((state) => state.appReducer[AppAction.PDF_URL]);
+  const pdfInstance = useSelector(
+    (state) => state.appReducer[AppAction.PDF_INSTANCE]
+  );
+  const showDrawer = useSelector(
+    (state) => state.appReducer[AppAction.DRAWER_VISIBILITY]
+  );
+  const isLoadingThumbnails = useSelector(
+    (state) => state.appReducer[AppAction.LOADING_THUMBNAILS]
+  );
+  const pageList = useSelector(
+    (state) => state.appReducer[AppAction.PAGE_LIST]
+  );
 
   const createPages = useCallback(
-    ({ doc}) => {
+    ({ doc }) => {
       createMultiplePages({
         doc,
         pageList,
-        canvasPrefix: "canvas_thumbnail",
-        pdfElement: "pdf-thumbnail-viewer",
+        canvasPrefix: `canvas_thumbnail_${uniqueId}`,
+        pdfElementId: `pdf-thumbnail-viewer-${uniqueId}`,
         canvasClassname: "react__pdf--drawer-thumbnail",
         showPageNumber: true,
-        pageNumberClassname: "react__pdf--drawer-thumbnail-page-number"
+        reset: true,
+        pageLabel: Translate({ id: "page" }),
+        pageNumberClassname: "react__pdf--drawer-thumbnail-page-number",
       });
     },
-    [pageList]
+    [pageList, uniqueId]
   );
 
   // Render all thumbnails
   useEffect(() => {
-    if (url) {
-      PdfJs.getDocument(url).promise.then(doc => {
-        dispatch(AppAction.setTotalPages(doc.numPages));
-        createPages({
-          doc
-        });
-        dispatch(AppAction.setLoadingThumbnails(false));
-      });
+    if (url && pdfInstance) {
+      pdfInstance.promise
+        .then((doc) => {
+          createPages({
+            doc,
+          });
+          dispatch(AppAction.setLoadingThumbnails(false));
+        })
+        .catch((e) => console.error("RenderAllThumbnails@drawerComponent", e));
     }
-  }, [url, dispatch, createPages]);
+  }, [url, pdfInstance, dispatch, createPages]);
+
+  if (
+    isLoadingThumbnails ||
+    typeof isLoadingThumbnails === "undefined" ||
+    typeof url === "undefined"
+  ) {
+    return <Spinner />;
+  }
 
   return (
     <div
       className={classnames("react__pdf--drawer", {
         "react__pdf--drawer-open": showDrawer,
-        "react__pdf--drawer-close": !showDrawer
+        "react__pdf--drawer-close": !showDrawer,
       })}
     >
       {/* Close button */}
@@ -66,9 +91,9 @@ function Drawer() {
 
       {/* Thumbnail wrapper */}
       <div
-        id="pdf-thumbnail-viewer"
+        id={`pdf-thumbnail-viewer-${uniqueId}`}
         className="react__pdf--drawer-thumbnails"
-        onClick={e => {
+        onClick={(e) => {
           const pageOrderNumber = e.target.getAttribute("page-order") || 1;
           dispatch(AppAction.setCurrentPage(+pageOrderNumber));
           dispatch(AppAction.setForceScroll(true));
@@ -76,9 +101,8 @@ function Drawer() {
       >
         {/* Placeholder for thumbnails */}
       </div>
-      <div className="mb-40"></div>
     </div>
   );
 }
 
-export default Drawer;
+export default React.memo(Drawer);

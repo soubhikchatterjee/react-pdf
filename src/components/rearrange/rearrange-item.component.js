@@ -1,5 +1,7 @@
 import React from "react";
 
+import Translate from "../../helpers/translate";
+
 function RearrangeItem({ page, order, onDragStart, onDrop }) {
   return (
     <div
@@ -7,23 +9,24 @@ function RearrangeItem({ page, order, onDragStart, onDrop }) {
       draggable={true}
       onDragStart={onDragStart}
       onDrop={onDrop}
-      onDragOver={e => e.preventDefault()}
+      onDragOver={(e) => e.preventDefault()}
       item-id={order}
       className="react__pdf--rearrange-modal-box-body-item mb-10"
     >
       <i
-        onDrop={onDrop}
-        onDragOver={e => e.preventDefault()}
+        onDragOver={(e) => e.preventDefault()}
         item-id={order}
         className="fas fa-bars"
       ></i>
       <div
-        onDrop={onDrop}
-        onDragOver={e => e.preventDefault()}
+        onDragOver={(e) => e.preventDefault()}
         item-id={order}
         className="react__pdf--rearrange-modal-box-body-item-label"
       >
-        Page {page}
+        {Translate({
+          id: "page",
+        })}{" "}
+        {page}
       </div>
       <div></div>
     </div>

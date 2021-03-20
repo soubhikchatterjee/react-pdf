@@ -11,6 +11,21 @@
   &-canvas {
     width: 95%;
 
+    // Rotate
+    &-deg0 {
+      transform: rotate(0deg);
+    }
+    &-deg90 {
+      transform: rotate(90deg);
+    }
+    &-deg180 {
+      transform: rotate(180deg);
+    }
+    &-deg270 {
+      transform: rotate(270deg);
+    }
+
+    // Zoom
     &-25 {
       width: 25%;
     }

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import ReactTooltip from "react-tooltip";
 
 // Custom Components
-import * as AppAction from "store/actions/app.action";
+import * as AppAction from "../../../store/actions/app.action";
 
 // Styles
 import "./title.styles.scss";
@@ -13,11 +13,15 @@ function Title() {
     state => state.appReducer[AppAction.PDF_FILENAME]
   );
 
+  if (!filename) return "...";
+
   return (
-    <div className="react__pdf--title">
+    <>
       <ReactTooltip />
-      <span data-tip={filename}>{filename}</span>
-    </div>
+      <div data-tip={filename} className="react__pdf--title">
+        <span>{filename}</span>
+      </div>
+    </>
   );
 }
 

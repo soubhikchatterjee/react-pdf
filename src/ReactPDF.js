@@ -1,56 +1,61 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import * as PdfJs from "pdfjs-dist";
 
 // Custom components
-import * as AppAction from "store/actions/app.action";
-import Preview from "components/preview/preview.component";
-import Toolbar from "components/toolbar/toolbar.component";
-import Drawer from "components/drawer/drawer.component";
-import Rearrange from "components/rearrange/rearrange.component";
-import Spinner from "components/spinner/spinner.component";
-import NotFound from "components/404/404.component";
-import debounce from "helpers/debounce";
+import * as AppAction from "./store/actions/app.action";
+import Preview from "./components/preview/preview.component";
+import Toolbar from "./components/toolbar/toolbar.component";
+import Drawer from "./components/drawer/drawer.component";
+import Rearrange from "./components/rearrange/rearrange.component";
+import Spinner from "./components/spinner/spinner.component";
+import NotFound from "./components/404/404.component";
+import debounce from "./helpers/debounce";
 
 // Styles
+// import 'font-awesome/css/font-awesome.css';
+// import "@fortawesome/fontawesome-svg-core/styles.css"; // import Font Awesome CSS
+import "./resources/fontawesome/css/all.css"
 import "./global.scss";
 
-function ReactPDF({ url }) {
+function ReactPDF({ uniqueId, pdfUrl, filename }) {
   const dispatch = useDispatch();
   const isLoadingPages = useSelector(
-    state => state.appReducer[AppAction.LOADING_PAGES]
-  );
-  const isLoadingThumbnails = useSelector(
-    state => state.appReducer[AppAction.LOADING_THUMBNAILS]
+    (state) => state.appReducer[AppAction.LOADING_PAGES]
   );
   const isVisibleRearrangeModal = useSelector(
-    state => state.appReducer[AppAction.REARRANGE_MODAL_VISIBILITY]
+    (state) => state.appReducer[AppAction.REARRANGE_MODAL_VISIBILITY]
   );
-  const [error, setError] = useState("");
+  const url = useSelector((state) => state.appReducer[AppAction.PDF_URL]);
+  const [error, setError] = useState(undefined);
 
   // Set the url to the store
   useEffect(() => {
-    if (url) {
-      fetch(url)
-        .then(res => {
-          const filename = url.split("/").pop();
-          dispatch(AppAction.setUrl(url));
-          dispatch(AppAction.setFilename(filename));
+    if (pdfUrl && filename && uniqueId) {
+      fetch(pdfUrl)
+        .then(() => {
+          setError("");
+          const pdfInstance = PdfJs.getDocument(pdfUrl);
+          dispatch(AppAction.setPdfInstance(pdfInstance));
           dispatch(AppAction.setLoadingPages(true));
           dispatch(AppAction.setLoadingThumbnails(true));
+          dispatch(AppAction.setUniqueId(uniqueId));
+          dispatch(AppAction.setUrl(pdfUrl));
+          dispatch(AppAction.setFilename(filename));
         })
-        .catch(e => {
+        .catch((e) => {
           setError(e.message);
         });
     }
-  }, [url, dispatch]);
+  }, [pdfUrl, filename, uniqueId, dispatch]);
 
   // When the user scrolls through the pages, we need to set the current page number
   useLayoutEffect(() => {
     const scrollListener = () => {
       let canvases = document.querySelectorAll("canvas");
-      canvases.forEach(canvas => {
+      canvases.forEach((canvas) => {
         const canvasElement = new IntersectionObserver(
-          entries => {
+          (entries) => {
             if (entries[0].isIntersecting) {
               debounce(() => {
                 dispatch(
@@ -60,24 +65,43 @@ function ReactPDF({ url }) {
             }
           },
           {
-            threshold: 0.3
+            threshold: 0.3,
           }
         );
         canvasElement.observe(canvas);
       });
     };
-    window.addEventListener("scroll", scrollListener);
 
-    return () => window.removeEventListener("scroll", scrollListener);
+    const documentBarElement = document.querySelector(".document-bar");
+    if (documentBarElement) {
+      documentBarElement.addEventListener("scroll", scrollListener);
+    }
+
+    return () =>
+      documentBarElement &&
+      documentBarElement.removeEventListener("scroll", scrollListener);
   }, [dispatch]);
+
+  if (
+    typeof isLoadingPages === "undefined" ||
+    typeof url === "undefined" ||
+    typeof error === "undefined" ||
+    typeof isVisibleRearrangeModal === "undefined"
+  ) {
+    return (
+      <div className="react__pdf--app">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="react__pdf--app">
       {/* Show loading backdrop */}
-      {(isLoadingPages || isLoadingThumbnails) && <Spinner />}
+      {isLoadingPages && <Spinner />}
 
       <Toolbar />
-      <Drawer />
+      {url && <Drawer />}
       {isVisibleRearrangeModal && <Rearrange />}
       {!error && <Preview />}
       {error && <NotFound error={error} />}

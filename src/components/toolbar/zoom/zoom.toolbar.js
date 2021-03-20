@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import ReactTooltip from "react-tooltip";
 
 // Custom components
-import * as AppAction from "store/actions/app.action";
+import * as AppAction from "../../../store/actions/app.action";
+import Translate from "../../../helpers/translate";
 
 // Styles
 import "./zoom.styles.scss";
 
 function Zoom() {
   const dispatch = useDispatch();
-  const zoomValue = useSelector(state => state.appReducer[AppAction.ZOOM_LEVEL]);
   const zoomLevelMap = {
     1: "25",
     2: "33",
@@ -28,38 +28,50 @@ function Zoom() {
     14: "250",
     15: "300",
     16: "400",
-    17: "500"
+    17: "500",
   };
   const [level, setLevel] = useState(8);
+
+  const updateZoom = (newLevel) => {
+    if (newLevel <= 1) {
+      newLevel = 1;
+    } else if (newLevel >= 17) {
+      newLevel = 17;
+    }
+    setLevel(newLevel);
+    dispatch(AppAction.setZoomLevel(zoomLevelMap[newLevel]));
+  };
 
   return (
     <div className="react__pdf--zoom">
       <ReactTooltip />
       <i
         onClick={() => {
-          let newLevel = level - 1;
-          if (level <= 1) {
-            newLevel = 1;
-          } 
-          setLevel(newLevel);
-          dispatch(AppAction.setZoomLevel(zoomLevelMap[newLevel]));
+          const newLevel = level - 1;
+          updateZoom(newLevel);
         }}
-        data-tip="Zoom Out"
+        data-tip={Translate({
+          id: "zoom_out",
+        })}
         className="fas fa-minus pointer"
       ></i>
       <div className="react__pdf--zoom-percentage">
-        {`${zoomValue || 100}%`}
+        <select onChange={(e) => updateZoom(e.target.value)} value={level}>
+          {Object.keys(zoomLevelMap).map((level) => (
+            <option key={level} value={level}>
+              {zoomLevelMap[level]}%
+            </option>
+          ))}
+        </select>
       </div>
       <i
         onClick={() => {
           let newLevel = level + 1;
-          if (level >= 17) {
-            newLevel = 17;
-          }
-          setLevel(newLevel);
-          dispatch(AppAction.setZoomLevel(zoomLevelMap[newLevel]));
+          updateZoom(newLevel);
         }}
-        data-tip="Zoom In"
+        data-tip={Translate({
+          id: "zoom_in",
+        })}
         className="fas fa-plus pointer"
       ></i>
     </div>

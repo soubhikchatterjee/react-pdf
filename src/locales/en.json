@@ -1,0 +1,13 @@
+{
+  "the_pdf_file_cannot_be_loaded_please_make_sure_the_url_exists_and_your_internet_is_up_and_running": "The PDF file cannot be loaded. Please make sure the url exists and your internet is up and running.",
+  "save_changes": "Save Changes",
+  "rearrange_pages": "Rearrange Pages",
+  "cancel_changes_and_close": "Cancel Changes & Close",
+  "show_thumbnails": "Show Thumbnails",
+  "rotate_selected_page": "Rotate Selected Page",
+  "rotate_all_pages": "Rotate All Pages",
+  "rotate_right": "Rotate Right",
+  "save_changes_to_pdf_file": "Save Changes to PDF file",
+  "zoom_out": "Zoom Out",
+  "zoom_in": "Zoom In"
+}

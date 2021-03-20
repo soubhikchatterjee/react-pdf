@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import classnames from "classnames";
 
 // Custom Components
-import * as AppAction from "store/actions/app.action";
+import * as AppAction from "../../store/actions/app.action";
 import Burger from "./burger/burger.toolbar";
 import Title from "./title/title.toolbar";
 import Navigation from "./navigation/navigation.toolbar";
@@ -19,17 +19,13 @@ function Toolbar() {
   const isLoadingPages = useSelector(
     state => state.appReducer[AppAction.LOADING_PAGES]
   );
-  const isLoadingThumbnails = useSelector(
-    state => state.appReducer[AppAction.LOADING_THUMBNAILS]
-  );
 
   const isProcessing = () => {
-    return (
-      isLoadingPages ||
-      isLoadingThumbnails ||
-      typeof isLoadingPages === "undefined" ||
-      typeof isLoadingThumbnails === "undefined"
-    );
+    return isLoadingPages || typeof isLoadingPages === "undefined";
+  };
+
+  const canModifyPdf = () => {
+    return true;
   };
 
   return (
@@ -42,9 +38,10 @@ function Toolbar() {
       <Title />
       <Navigation />
       <Zoom />
-      <Rotate />
-      <Rearrange />
-      <Save />
+
+      {canModifyPdf() && <Rotate />}
+      {canModifyPdf() && <Rearrange />}
+      {canModifyPdf() && <Save />}
     </div>
   );
 }
