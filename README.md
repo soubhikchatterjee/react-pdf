@@ -2,12 +2,12 @@
 
 View PDF files in your react project. Supports the following features:
 
-- Zoom
-- Next and Prev buttons to navigate pages
-- Rotate a page
-- Page scrolling
-- Rearrange
-- Thumbnails
+- Zoom Pages
+- Next and Prev buttons to navigate between pages
+- Rotate a Page
+- Page Scrolling
+- Rearrange Pages
+- Thumbnail Preview
 
 ## Install
 

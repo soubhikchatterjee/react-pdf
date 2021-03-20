@@ -1,4 +1,4 @@
-import * as AppAction from "store/actions/app.action";
+import * as AppAction from "../actions/app.action";
 
 const AppReducer = (state = {}, action) => {
   switch (action.type) {
@@ -14,10 +14,22 @@ const AppReducer = (state = {}, action) => {
         [AppAction.LOADING_THUMBNAILS]: action.payload
       };
 
+    case AppAction.PDF_UNIQUE_ID:
+      return {
+        ...state,
+        [AppAction.PDF_UNIQUE_ID]: action.payload
+      };
+
     case AppAction.PDF_URL:
       return {
         ...state,
         [AppAction.PDF_URL]: action.payload
+      };
+
+    case AppAction.PDF_INSTANCE:
+      return {
+        ...state,
+        [AppAction.PDF_INSTANCE]: action.payload
       };
 
     case AppAction.PDF_FILENAME:
@@ -94,6 +106,12 @@ const AppReducer = (state = {}, action) => {
       return {
         ...state,
         [AppAction.CHANGES_SAVED]: action.payload
+      };
+
+    case AppAction.CHANGE_ID:
+      return {
+        ...state,
+        [AppAction.CHANGE_ID]: action.payload
       };
 
     default:

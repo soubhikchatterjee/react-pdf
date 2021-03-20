@@ -1,0 +1,13 @@
+{
+  "the_pdf_file_cannot_be_loaded_please_make_sure_the_url_exists_and_your_internet_is_up_and_running": "Le fichier PDF ne peut pas être chargé. Veuillez vous assurer que l'URL existe et que votre connexion Internet est opérationnelle.",
+  "save_changes": "Sauvegarder les modifications",
+  "rearrange_pages": "Réoxrganiser les pages",
+  "cancel_changes_and_close": "Annuler les modifications et fermer",
+  "show_thumbnails": "Affiche des vignettes",
+  "rotate_selected_page": "Faire pivoter la page sélectionnée",
+  "rotate_all_pages": "Faire pivoter toutes les pages",
+  "rotate_right": "Tourner à droite",
+  "save_changes_to_pdf_file": "Enregistrer les modifications dans le fichier PDF",
+  "zoom_out": "Dézoomer",
+  "zoom_in": "agrandir"
+}

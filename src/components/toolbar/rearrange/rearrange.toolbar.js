@@ -3,14 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import ReactTooltip from "react-tooltip";
 
 // Custom components
-import * as AppAction from "store/actions/app.action";
+import * as AppAction from "../../../store/actions/app.action";
+import Translate from "../../../helpers/translate";
 
 // Styles
 import "./rearrange.styles.scss";
 
 function Rearrange() {
   const dispatch = useDispatch();
-  const pageList = useSelector(state => state.appReducer[AppAction.PAGE_LIST]);
+  const pageList = useSelector(
+    (state) => state.appReducer[AppAction.PAGE_LIST]
+  );
 
   return (
     <div
@@ -22,7 +25,12 @@ function Rearrange() {
       className="react__pdf-rearrange"
     >
       <ReactTooltip />
-      <i data-tip="Rearrange Pages" className="far fa-copy pointer"></i>
+      <i
+        data-tip={Translate({
+          id: "rearrange_pages",
+        })}
+        className="far fa-copy pointer"
+      ></i>
     </div>
   );
 }

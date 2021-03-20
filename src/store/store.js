@@ -2,7 +2,7 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import Thunk from "redux-thunk";
 
 // Reducers
-import appReducer from "store/reducers/app.reducer";
+import appReducer from "./reducers/app.reducer";
 
 export const middlewares = [Thunk];
 
@@ -11,10 +11,12 @@ export const createStoreWithMiddlware = applyMiddleware(...middlewares)(
 );
 
 const rootReducer = combineReducers({
-  appReducer
+  appReducer,
 });
 
-export default createStoreWithMiddlware(
-  rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+// export default createStoreWithMiddlware(
+//   rootReducer,
+//   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+// );
+
+export const store = createStoreWithMiddlware(rootReducer);

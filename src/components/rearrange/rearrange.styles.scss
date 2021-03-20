@@ -1,13 +1,15 @@
 .react__pdf--rearrange-modal {
   height: 100vh;
-  width: 100vw;
+  // width: 100vw;
+
+  width: 100%;
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
 
   &-backdrop {
-    width: 100vw;
+    // width: 100vw;
     background-color: var(--drawer-bg-color);
     opacity: 0.9;
     position: absolute;
@@ -26,7 +28,7 @@
     background-color: #fff;
     border: 1px solid var(--canvas-bg-color);
     height: 50%;
-    width: 30%;
+    width: 40%;
     border-radius: 5px;
     padding: 1rem;
     overflow: auto;

@@ -3,8 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import ReactTooltip from "react-tooltip";
 
 // Custom components
-import * as AppAction from "store/actions/app.action";
-import Button from "components/button/button.component";
+import * as AppAction from "../../../store/actions/app.action";
+import Button from "../../../components/button/button.component";
+import Translate from "../../../helpers/translate";
 
 // Styles
 import "./rotate.styles.scss";
@@ -12,52 +13,31 @@ import "./rotate.styles.scss";
 function Rotate() {
   const dispatch = useDispatch();
   const currentPage = useSelector(
-    state => state.appReducer[AppAction.PDF_CURRENT_PAGE]
+    (state) => state.appReducer[AppAction.PDF_CURRENT_PAGE]
   );
-
-  const rotateLeftMenu = [
-    {
-      label: "Rotate Selected Page",
-      onClick: () =>
-        dispatch(
-          AppAction.setRotateCurrentPage({ currentPage, direction: "LEFT" })
-        )
-    },
-    {
-      label: "Rotate All Pages",
-      onClick: () => dispatch(AppAction.setRotateAllPages("LEFT"))
-    }
-  ];
 
   const rotateRightMenu = [
     {
-      label: "Rotate Selected Page",
+      label: Translate({
+        id: "rotate_selected_page",
+      }),
       onClick: () => {
         dispatch(
           AppAction.setRotateCurrentPage({ currentPage, direction: "RIGHT" })
         );
-      }
+      },
     },
     {
-      label: "Rotate All Pages",
-      onClick: () => dispatch(AppAction.setRotateAllPages("RIGHT"))
-    }
+      label: Translate({
+        id: "rotate_all_pages",
+      }),
+      onClick: () => dispatch(AppAction.setRotateAllPages("RIGHT")),
+    },
   ];
 
   return (
     <div className="react__pdf--rotate">
       <ReactTooltip />
-      <Button
-        menu={rotateLeftMenu}
-        defaultClick={() => {
-          dispatch(
-            AppAction.setRotateCurrentPage({ currentPage, direction: "LEFT" })
-          );
-        }}
-        tooltip="Rotate Left"
-        wrapperClassname="mr-20"
-        iconClassname="fas fa-undo-alt pointer"
-      />
       <Button
         menu={rotateRightMenu}
         defaultClick={() => {
@@ -65,7 +45,9 @@ function Rotate() {
             AppAction.setRotateCurrentPage({ currentPage, direction: "RIGHT" })
           );
         }}
-        tooltip="Rotate Right"
+        tooltip={Translate({
+          id: "rotate_right",
+        })}
         iconClassname="fas fa-redo-alt pointer"
       />
     </div>

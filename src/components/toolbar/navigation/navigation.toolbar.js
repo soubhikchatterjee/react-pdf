@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Custom components
-import * as AppAction from "store/actions/app.action";
+import * as AppAction from "../../../store/actions/app.action";
 
 // Styles
 import "./navigation.styles.scss";
