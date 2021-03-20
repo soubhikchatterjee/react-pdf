@@ -9,6 +9,13 @@ View PDF files in your react project. Supports the following features:
 - Rearrange Pages
 - Thumbnail Preview
 
+
+[![Watch Demo](https://img.youtube.com/vi/7P7DYkTOC0M/0.jpg)](https://www.youtube.com/watch?v=7P7DYkTOC0M)
+
+(click on the image above to watch video demo)
+
+---
+
 ## Install
 
 > npm i @soubhikchatterjee/react-pdf

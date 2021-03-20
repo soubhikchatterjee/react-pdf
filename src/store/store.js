@@ -11,12 +11,7 @@ export const createStoreWithMiddlware = applyMiddleware(...middlewares)(
 );
 
 const rootReducer = combineReducers({
-  appReducer,
+  appReducer
 });
-
-// export default createStoreWithMiddlware(
-//   rootReducer,
-//   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-// );
 
 export const store = createStoreWithMiddlware(rootReducer);
