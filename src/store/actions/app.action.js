@@ -10,11 +10,12 @@ export const PDF_FORCE_SCROLL = "PDF_FORCE_SCROLL";
 export const PDF_TOTAL_PAGES = "PDF_TOTAL_PAGES";
 export const ROTATE_SELECTED_PAGE = "ROTATE_SELECTED_PAGE";
 export const ROTATE_ALL_PAGES = "ROTATE_ALL_PAGES";
-export const PAGE_LIST = "ROTATE_PAGE_LIST";
+export const PAGE_LIST = "PAGE_LIST";
 export const ZOOM_LEVEL = "ZOOM_LEVEL";
 export const REARRANGE_MODAL_VISIBILITY = "REARRANGE_MODAL_VISIBILITY";
 export const CHANGES_SAVED = "CHANGES_SAVED";
 export const CHANGE_ID = "CHANGE_ID";
+export const PAGE_CHANGES = "PAGE_CHANGES";
 
 export const setLoadingPages = loading => dispatch => {
   return dispatch({
@@ -138,6 +139,13 @@ export const setChangeId = () => dispatch => {
   return dispatch({
     type: CHANGE_ID,
     payload: Math.random()
+  });
+};
+
+export const setPageChanges = pageChanges => dispatch => {
+  return dispatch({
+    type: PAGE_CHANGES,
+    payload: pageChanges
   });
 };
 

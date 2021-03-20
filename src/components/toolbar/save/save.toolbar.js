@@ -13,14 +13,10 @@ import "./save.styles.scss";
 function Save() {
   const dispatch = useDispatch();
   const isChangesSaved = useSelector(
-    (state) => state.appReducer[AppAction.CHANGES_SAVED]
+    state => state.appReducer[AppAction.CHANGES_SAVED]
   );
-  const changeId = useSelector(
-    (state) => state.appReducer[AppAction.CHANGE_ID]
-  );
-  const pageList = useSelector(
-    (state) => state.appReducer[AppAction.PAGE_LIST]
-  );
+  const changeId = useSelector(state => state.appReducer[AppAction.CHANGE_ID]);
+  const pageList = useSelector(state => state.appReducer[AppAction.PAGE_LIST]);
   const [animate, setAnimate] = useState(false);
 
   // Animate the save icon
@@ -32,15 +28,14 @@ function Save() {
   }, [changeId]);
 
   const commitChanges = async () => {
-    console.log("Changes commited");
-    console.info(pageList);
+    dispatch(AppAction.setPageChanges(pageList));
   };
 
   return (
     <div
       className={classnames("react__pdf--save", {
         "react__pdf--save-inactive":
-          isChangesSaved === true || typeof isChangesSaved === "undefined",
+          isChangesSaved === true || typeof isChangesSaved === "undefined"
       })}
     >
       <ReactTooltip />
@@ -50,10 +45,10 @@ function Save() {
           dispatch(AppAction.setChangesSaved(true));
         }}
         data-tip={Translate({
-          id: "save_changes_to_pdf_file",
+          id: "save_changes_to_pdf_file"
         })}
         className={classnames("fas fa-save pointer", {
-          "react__pdf--save-spin": animate,
+          "react__pdf--save-spin": animate
         })}
       ></i>
     </div>

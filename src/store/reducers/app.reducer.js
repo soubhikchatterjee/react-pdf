@@ -113,6 +113,8 @@ const AppReducer = (state = {}, action) => {
         ...state,
         [AppAction.CHANGE_ID]: action.payload
       };
+    case AppAction.PAGE_CHANGES:
+      return { ...state, [AppAction.PAGE_CHANGES]: action.payload };
 
     default:
       return state;

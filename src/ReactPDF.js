@@ -13,18 +13,18 @@ import NotFound from "./components/404/404.component";
 import debounce from "./helpers/debounce";
 
 // Styles
-import "./resources/fontawesome/css/all.css"
+import "./resources/fontawesome/css/all.min.css";
 import "./global.scss";
 
 function ReactPDF({ uniqueId, pdfUrl, filename }) {
   const dispatch = useDispatch();
   const isLoadingPages = useSelector(
-    (state) => state.appReducer[AppAction.LOADING_PAGES]
+    state => state.appReducer[AppAction.LOADING_PAGES]
   );
   const isVisibleRearrangeModal = useSelector(
-    (state) => state.appReducer[AppAction.REARRANGE_MODAL_VISIBILITY]
+    state => state.appReducer[AppAction.REARRANGE_MODAL_VISIBILITY]
   );
-  const url = useSelector((state) => state.appReducer[AppAction.PDF_URL]);
+  const url = useSelector(state => state.appReducer[AppAction.PDF_URL]);
   const [error, setError] = useState(undefined);
 
   // Set the url to the store
@@ -41,7 +41,7 @@ function ReactPDF({ uniqueId, pdfUrl, filename }) {
           dispatch(AppAction.setUrl(pdfUrl));
           dispatch(AppAction.setFilename(filename));
         })
-        .catch((e) => {
+        .catch(e => {
           setError(e.message);
         });
     }
@@ -51,9 +51,9 @@ function ReactPDF({ uniqueId, pdfUrl, filename }) {
   useLayoutEffect(() => {
     const scrollListener = () => {
       let canvases = document.querySelectorAll("canvas");
-      canvases.forEach((canvas) => {
+      canvases.forEach(canvas => {
         const canvasElement = new IntersectionObserver(
-          (entries) => {
+          entries => {
             if (entries[0].isIntersecting) {
               debounce(() => {
                 dispatch(
@@ -63,7 +63,7 @@ function ReactPDF({ uniqueId, pdfUrl, filename }) {
             }
           },
           {
-            threshold: 0.3,
+            threshold: 0.3
           }
         );
         canvasElement.observe(canvas);
