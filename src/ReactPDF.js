@@ -13,8 +13,6 @@ import NotFound from "./components/404/404.component";
 import debounce from "./helpers/debounce";
 
 // Styles
-// import 'font-awesome/css/font-awesome.css';
-// import "@fortawesome/fontawesome-svg-core/styles.css"; // import Font Awesome CSS
 import "./resources/fontawesome/css/all.css"
 import "./global.scss";
 

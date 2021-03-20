@@ -30,6 +30,8 @@ or check the [Fullpage Screenshot!](https://i.imgur.com/dwVzAQE.png)
 import ReactPDF from "@soubhikchatterjee/react-pdf";
 
  <ReactPDF
-    url="http://www.example.com/sample.pdf"
- />
+      uniqueId={Math.random()}
+      filename="sample.pdf"
+      pdfUrl="https://example.com/sample.pdf"
+   />
 ```
