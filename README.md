@@ -59,7 +59,6 @@ ReactDOM.render(
 
 ```
 
-
 import ReactPDF from "@soubhikchatterjee/react-pdf";
 
  <ReactPDF
@@ -67,4 +66,38 @@ import ReactPDF from "@soubhikchatterjee/react-pdf";
       filename="sample.pdf"
       pdfUrl="https://example.com/sample.pdf"
    />
+```
+
+If you want to see the list of all pages along with their changes (rotation angle, reordered page) use the following code
+
+`/src/App.js`
+
+```
+import { useEffect } from "react";
+import ReactPDF from "@soubhikchatterjee/react-pdf";
+import { useSelector } from "react-redux";
+import * as AppAction from "@soubhikchatterjee/react-pdf/dist/store/actions/app.action";
+
+export default function App() {
+  const pageChanges = useSelector(
+    (state) => state.appReducer[AppAction.PAGE_CHANGES]
+  );
+
+  useEffect(() => {
+    if (pageChanges) {
+      console.log(pageChanges);
+    }
+  }, [pageChanges]);
+
+  return (
+    <div className="App">
+      <ReactPDF
+        uniqueId={Math.random()}
+        filename="c4611_sample_explain.pdf"
+        pdfUrl="https://api.allorigins.win/raw?url=https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf"
+      />
+    </div>
+  );
+}
+
 ```
