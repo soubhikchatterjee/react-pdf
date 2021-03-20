@@ -14,11 +14,15 @@ View PDF files in your react project. Supports the following features:
 
 (click on the image above to watch video demo)
 
+
+or check the [Fullpage Screenshot!](https://i.imgur.com/dwVzAQE.png)
+
 ---
 
 ## Install
 
 > npm i @soubhikchatterjee/react-pdf
+> npm i -D node-sass
 
 ### Usage
 
