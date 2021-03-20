@@ -1,6 +1,6 @@
 {
   "name": "@soubhikchatterjee/react-pdf",
-  "version": "0.1.25",
+  "version": "0.1.27",
   "author": "Soubhik Chatterjee <soubhik@chatterjee.pw>",
   "contributors": [
     {
@@ -44,17 +44,6 @@
     "scroll pdf pages",
     "rearrange pdf pages"
   ],
-  "peerDependencies": {
-    "classnames": "^2.2.6",
-    "pdfjs-dist": "^2.6.347",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-redux": "^7.2.2",
-    "react-scripts": "4.0.3",
-    "react-tooltip": "^4.2.15",
-    "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
-  },
   "scripts": {
     "start": "react-scripts start",
     "build:dev": "NODE_ENV=production react-scripts build",
@@ -87,6 +76,16 @@
     "node-sass": "^5.0.0"
   },
   "dependencies": {
+    "classnames": "^2.2.6",
+    "pdfjs-dist": "^2.6.347",
     "react-tooltip": "^4.2.15"
+  },
+  "peerDependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-redux": "^7.2.2",
+    "react-scripts": "4.0.3",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
   }
 }
